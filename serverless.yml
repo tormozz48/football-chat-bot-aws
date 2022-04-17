@@ -6,13 +6,24 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs14.x
+  environment:
+    TELEGRAM_BOT_TOKEN: ${param:telegramBotToken}
+    TELEGRAM_BOT_WEBHOOK_URL: ${param:telegramBotWebhookUrl}
 
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
 
 functions:
-  api:
-    handler: src/handler.handler
+  ping:
+    handler: src/lambda/ping.handler
     events:
-      - httpApi: '*'
+      - httpApi:
+          path: /ping
+          method: get
+  telegram:
+    handler: src/lambda/telegram.handler
+    events:
+      - httpApi:
+          path: /telegram
+          method: post

@@ -32,10 +32,14 @@
   "dependencies": {
     "commitizen": "^4.2.4",
     "express": "^4.17.1",
-    "serverless-http": "^2.7.0"
+    "lambda-log": "^3.1.0",
+    "serverless-http": "^2.7.0",
+    "telegraf": "^4.7.0",
+    "telegraf-aws": "^1.0.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.93",
+    "@types/lambda-log": "^2.2.1",
     "@typescript-eslint/parser": "^5.19.0",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
