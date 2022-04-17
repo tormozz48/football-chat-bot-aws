@@ -1,0 +1,14 @@
+org: tormozz48
+app: football-chat-bot-aws
+service: football-chat-bot-aws
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - httpApi: '*'
