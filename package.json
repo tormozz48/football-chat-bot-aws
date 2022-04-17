@@ -1,13 +1,31 @@
 {
   "name": "football-chat-bot-aws",
   "version": "1.0.0",
-  "description": "",
+  "description": "Football Chat Bot. Integrated into Amazon Web Services",
+  "author": {
+    "name": "Andrey Kuznetsov",
+    "email": "tormozz48@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:tormozz48/football-chat-bot-aws.git"
+  },
+  "license": "MIT",
+  "keywords": ["NodeJS", "AWS Lambda", "TypeScript", "Serverless", "PostgresSQL", "Telegram", "Bot", "VK"],
+  "scripts": {
+    "lint": "echo 'Is not set'",
+    "local": "serverless offline",
+    "deploy": "serverless deploy",
+    "test": "echo 'Is not set'",
+    "coverage": "echo 'Is not set'"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "serverless-http": "^2.7.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.93",
+    "serverless-offline": "^8.7.0",
     "serverless-plugin-typescript": "^2.1.2",
     "typescript": "^4.6.3"
   }
