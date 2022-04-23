@@ -1,0 +1,15 @@
+export default {
+  clearMocks: true,
+  coverageDirectory: './coverage',
+  coveragePathIgnorePatterns: ['<rootDir>/node_modules/'],
+  coverageProvider: 'v8',
+  globalSetup: './test/setup.ts',
+  resetMocks: false,
+  restoreMocks: true,
+  rootDir: './',
+  testLocationInResults: true,
+  transform: { '^.+\\.ts$': 'ts-jest' },
+  testMatch: ['<rootDir>/src/**/*.test.ts'],
+  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+  verbose: true,
+};

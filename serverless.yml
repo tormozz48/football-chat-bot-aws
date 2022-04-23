@@ -5,6 +5,25 @@ frameworkVersion: '3'
 
 custom:
   tableName: 'events-table-${sls:stage}'
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      docker: true
+      sharedDb: true
+      inMemory: false
+      migrate: true
+      seed: false
+      noStart: false
+      convertEmptyValues: true
+      dockerImage: amazon/dynamodb-local
+
+plugins:
+  - serverless-jest-plugin
+  - serverless-dynamodb-local
+  - serverless-plugin-typescript
+  - serverless-offline
 
 provider:
   name: aws
@@ -27,11 +46,6 @@ provider:
           Resource:
             - Fn::GetAtt: [ EventsTable, Arn ]
 
-plugins:
-  - serverless-dynamodb-local
-  - serverless-plugin-typescript
-  - serverless-offline
-
 functions:
   ping:
     handler: src/lambda/ping.handler
@@ -46,34 +60,41 @@ functions:
           path: /telegram
           method: post
   eventAdd:
-    handler: src/lambda/actions/event-add.action.eventAdd
+    handler: src/lambda/actions/event-add.eventAdd
+    events:
+      - httpApi:
+          path: /eventAdd
+          method: post
   eventInfo:
-    handler: src/lambda/actions/event-info.action.eventInfo
+    handler: src/lambda/actions/event-info.eventInfo
   eventRemove:
-    handler: src/lambda/actions/event-remove.action.eventRemove
+    handler: src/lambda/actions/event-remove.eventRemove
   memberAdd:
-    handler: src/lambda/actions/member-add.action.memberAdd
+    handler: src/lambda/actions/member-add.memberAdd
   memberRemove:
-    handler: src/lambda/actions/member-remove.action.memberRemove
+    handler: src/lambda/actions/member-remove.memberRemove
 
 resources:
   Resources:
     EventsTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
+        TableName: ${self:custom.tableName}
+        BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           -
             AttributeName: chatId
             AttributeType: N
           -
-            AttributeName: date
-            AttributeType: S
+            AttributeName: eventDate
+            AttributeType: N
         KeySchema:
           -
             AttributeName: chatId
             KeyType: HASH
           -
-            AttributeName: date
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
-        TableName: ${self:custom.tableName}
+            AttributeName: eventDate
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
