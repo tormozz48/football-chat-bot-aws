@@ -1,15 +1,16 @@
 export enum ACTION_STATUSES {
-  STATUS_SUCCESS = 'success',
-  STATUS_FAIL = 'fail',
-  STATUS_NO_EVENT = 'no_event',
-  STATUS_ALREADY_ADDED = 'already_added',
-  STATUS_NO_PLAYER = 'no_player',
-  STATUS_INVALID_DATE = 'invalid_date',
-  STATUS_INVALID_DATE_PAST = 'invalid_date_past',
+  SUCCESS = 'success',
+  FAIL = 'fail',
+  EVENT_ALREADY_EXISTS = 'event_already_exist',
+  EVENT_INVALID_DATE = 'invalid_date',
+  EVENT_INVALID_DATE_PAST = 'invalid_date_past',
+  MEMBER_NO_EVENT = 'no_event',
+  MEMBER_NO_PLAYER = 'no_player',
+  MEMBER_ALREADY_ADDED = 'already_added',
 }
 
 interface Event {
-  readonly date: string;
+  readonly date: number;
 }
 
 interface Member {
@@ -29,24 +30,25 @@ interface MemberList {
 type ActionResult<T = ACTION_STATUSES, U = {}> = { status: T; body: U };
 
 export type ActionResultEventAdd =
-  | ActionResult<ACTION_STATUSES.STATUS_INVALID_DATE>
-  | ActionResult<ACTION_STATUSES.STATUS_INVALID_DATE_PAST>
-  | ActionResult<ACTION_STATUSES.STATUS_SUCCESS, Event>;
+  | ActionResult<ACTION_STATUSES.EVENT_INVALID_DATE>
+  | ActionResult<ACTION_STATUSES.EVENT_INVALID_DATE_PAST>
+  | ActionResult<ACTION_STATUSES.EVENT_ALREADY_EXISTS, Event>
+  | ActionResult<ACTION_STATUSES.SUCCESS, Event>;
 
 export type ActionResultEventRemove =
-  | ActionResult<ACTION_STATUSES.STATUS_NO_EVENT>
-  | ActionResult<ACTION_STATUSES.STATUS_SUCCESS, Event>;
+  | ActionResult<ACTION_STATUSES.MEMBER_NO_EVENT>
+  | ActionResult<ACTION_STATUSES.SUCCESS, Event>;
 
 export type ActionResultEventInfo =
-  | ActionResult<ACTION_STATUSES.STATUS_NO_EVENT>
-  | ActionResult<ACTION_STATUSES.STATUS_SUCCESS, Event & MemberList>;
+  | ActionResult<ACTION_STATUSES.MEMBER_NO_EVENT>
+  | ActionResult<ACTION_STATUSES.SUCCESS, Event & MemberList>;
 
 export type ActionResultMemberAdd =
-  | ActionResult<ACTION_STATUSES.STATUS_NO_EVENT>
-  | ActionResult<ACTION_STATUSES.STATUS_ALREADY_ADDED, Member>
-  | ActionResult<ACTION_STATUSES.STATUS_SUCCESS, Member & MemberList>;
+  | ActionResult<ACTION_STATUSES.MEMBER_NO_EVENT>
+  | ActionResult<ACTION_STATUSES.MEMBER_ALREADY_ADDED, Member>
+  | ActionResult<ACTION_STATUSES.SUCCESS, Member & MemberList>;
 
 export type ActionResultMemberRemove =
-  | ActionResult<ACTION_STATUSES.STATUS_NO_EVENT>
-  | ActionResult<ACTION_STATUSES.STATUS_NO_PLAYER, Member>
-  | ActionResult<ACTION_STATUSES.STATUS_SUCCESS, Member & MemberList>;
+  | ActionResult<ACTION_STATUSES.MEMBER_NO_EVENT>
+  | ActionResult<ACTION_STATUSES.MEMBER_NO_PLAYER, Member>
+  | ActionResult<ACTION_STATUSES.SUCCESS, Member & MemberList>;

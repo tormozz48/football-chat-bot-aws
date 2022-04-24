@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@aws-sdk/lib-dynamodb": "^3.76.0",
+    "dayjs": "^1.11.1",
     "express": "^4.17.1",
     "lambda-log": "^3.1.0",
     "serverless-dynamodb-client": "0.0.2",
@@ -52,6 +53,7 @@
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "faker": "5.5.3",
     "jest": "^27.5.1",
     "jest-environment-serverless": "^0.3.0",
     "prettier": "^2.6.2",

@@ -51,6 +51,11 @@ export async function getActiveEvent<T = Event>({ chatId }: ChatIdParam): Promis
 }
 
 export async function createEvent(params: CreateEventParam): Promise<void> {
+  const events = await getActiveEvents(params);
+  for (const { chatId, date: eventDate } of events) {
+    await deativateEvent({ chatId, eventDate });
+  }
+
   await dynamoDBDocumentClient
     .put({
       ...eventsTableName,

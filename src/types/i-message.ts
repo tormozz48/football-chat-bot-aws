@@ -1,8 +1,8 @@
 export interface IMessage {
-  chatId: number;
-  lang: string;
-  text: string;
-  fullText: string;
-  command: string;
-  name: string;
+  readonly chatId: number;
+  readonly lang: string;
+  readonly text: string;
+  readonly fullText: string;
+  readonly command: string;
+  readonly name: string;
 }
