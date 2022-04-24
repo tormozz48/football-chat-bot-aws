@@ -36,6 +36,7 @@
     "@aws-sdk/lib-dynamodb": "^3.76.0",
     "dayjs": "^1.11.1",
     "express": "^4.17.1",
+    "handlebars": "^4.7.7",
     "lambda-log": "^3.1.0",
     "serverless-dynamodb-client": "0.0.2",
     "serverless-http": "^2.7.0",

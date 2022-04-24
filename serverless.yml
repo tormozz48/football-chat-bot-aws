@@ -61,10 +61,6 @@ functions:
           method: post
   eventAdd:
     handler: src/lambda/actions/event-add.eventAdd
-    events:
-      - httpApi:
-          path: /eventAdd
-          method: post
   eventInfo:
     handler: src/lambda/actions/event-info.eventInfo
   eventRemove:

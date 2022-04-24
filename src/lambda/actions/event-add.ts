@@ -1,23 +1,17 @@
-import { Context, Handler } from 'aws-lambda';
+import { Handler } from 'aws-lambda';
 import * as logger from 'lambda-log';
-import { ActionResultEventAdd, ACTION_STATUSES } from 'src/types/i-action-result';
 import { isDateInPast, parseDate } from 'src/utils/date';
 import { createEvent, getActiveEvent, getEvent } from '../../database/repository';
-import { IMessage } from '../../types/i-message';
+import { ActionResultEventAdd, ACTION_STATUSES, IMessage } from '../../types';
 
 logger.options.tags.push('eventAdd');
 
 export const eventAdd: Handler<IMessage, ActionResultEventAdd> = async (
   event,
-  context: Context,
 ): Promise<ActionResultEventAdd> => {
   const { chatId } = event;
 
-  logger.info('command received', {
-    chatId,
-    lang: event.lang,
-    command: event.command,
-  });
+  logger.debug('command received', event);
 
   let parsedDate = parseDate(event.text);
   if (!parsedDate.isValid()) {
@@ -36,14 +30,14 @@ export const eventAdd: Handler<IMessage, ActionResultEventAdd> = async (
     logger.warn('event already exists', { chatId, date: event.text });
     return {
       status: ACTION_STATUSES.EVENT_ALREADY_EXISTS,
-      body: { date: eventDate },
+      body: existedEvent,
     };
   }
 
   await createEvent({ chatId, eventDate });
   const activeEvent = await getActiveEvent({ chatId });
 
-  logger.info('event has been successfully created', activeEvent);
+  logger.debug('event has been successfully created', activeEvent);
 
-  return { status: ACTION_STATUSES.SUCCESS, body: { date: activeEvent.date } };
+  return { status: ACTION_STATUSES.SUCCESS, body: activeEvent };
 };
