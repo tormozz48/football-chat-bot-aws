@@ -1,49 +1,55 @@
 import { Event } from './database/types';
 
-export enum ACTION_STATUSES {
-  SUCCESS = 'success',
-  FAIL = 'fail',
-  EVENT_ALREADY_EXISTS = 'event_already_exist',
-  EVENT_INVALID_DATE = 'invalid_date',
-  EVENT_INVALID_DATE_PAST = 'invalid_date_past',
-  EVENT_NOT_FOUND = 'no_event',
-  MEMBER_NOT_FOUND = 'no_player',
-  MEMBER_ALREADY_ADDED = 'already_added',
+export enum Actions {
+  eventAdd = 'event_add',
+  eventRemove = 'event_remove',
+  eventInfo = 'info',
+  memberAdd = 'add',
+  memberRemove = 'remove',
+}
+
+export enum ActionStatuses {
+  success = 'success',
+  fail = 'fail',
+  eventAlreadyExists = 'event_already_exist',
+  eventInvalidDate = 'invalid_date',
+  eventInvalidDatePast = 'invalid_date_past',
+  eventNotFound = 'no_event',
+  memberNotFound = 'no_player',
+  memberAlreadyAdded = 'already_added',
 }
 
 type Member = { name: string };
 
-type ActionResult<T = ACTION_STATUSES, U = {}> = { status: T; body: U };
+export type ActionResult<T = ActionStatuses, U = {}> = { status: T; body: U };
 
-export type ActionResultEventAdd =
-  | ActionResult<ACTION_STATUSES.EVENT_INVALID_DATE>
-  | ActionResult<ACTION_STATUSES.EVENT_INVALID_DATE_PAST>
-  | ActionResult<ACTION_STATUSES.EVENT_ALREADY_EXISTS, Event>
-  | ActionResult<ACTION_STATUSES.SUCCESS, Event>;
-
-export type ActionResultEventRemove =
-  | ActionResult<ACTION_STATUSES.EVENT_NOT_FOUND>
-  | ActionResult<ACTION_STATUSES.SUCCESS, Event>;
-
-export type ActionResultEventInfo =
-  | ActionResult<ACTION_STATUSES.EVENT_NOT_FOUND>
-  | ActionResult<ACTION_STATUSES.SUCCESS, Event>;
-
-export type ActionResultMemberAdd =
-  | ActionResult<ACTION_STATUSES.EVENT_NOT_FOUND>
-  | ActionResult<ACTION_STATUSES.MEMBER_ALREADY_ADDED, Member & Event>
-  | ActionResult<ACTION_STATUSES.SUCCESS, Member & Event>;
-
-export type ActionResultMemberRemove =
-  | ActionResult<ACTION_STATUSES.EVENT_NOT_FOUND>
-  | ActionResult<ACTION_STATUSES.MEMBER_NOT_FOUND, Member & Event>
-  | ActionResult<ACTION_STATUSES.SUCCESS, Member & Event>;
+export type ActionResults = {
+  [Actions.eventAdd]:
+    | ActionResult<ActionStatuses.eventInvalidDate>
+    | ActionResult<ActionStatuses.eventInvalidDatePast>
+    | ActionResult<ActionStatuses.eventAlreadyExists, Event>
+    | ActionResult<ActionStatuses.success, Event>;
+  [Actions.eventInfo]:
+    | ActionResult<ActionStatuses.eventNotFound>
+    | ActionResult<ActionStatuses.success, Event>;
+  [Actions.eventRemove]:
+    | ActionResult<ActionStatuses.eventNotFound>
+    | ActionResult<ActionStatuses.success, Event>;
+  [Actions.memberAdd]:
+    | ActionResult<ActionStatuses.eventNotFound>
+    | ActionResult<ActionStatuses.memberAlreadyAdded, Member & Event>
+    | ActionResult<ActionStatuses.success, Member & Event>;
+  [Actions.memberRemove]:
+    | ActionResult<ActionStatuses.eventNotFound>
+    | ActionResult<ActionStatuses.memberNotFound, Member & Event>
+    | ActionResult<ActionStatuses.success, Member & Event>;
+};
 
 export interface IMessage {
   readonly chatId: number;
-  readonly lang: string;
+  readonly lang: keyof LangBundle;
   readonly text: string;
   readonly fullText: string;
-  readonly command: string;
+  readonly command: Actions;
   readonly memberName: string;
 }

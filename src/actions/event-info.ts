@@ -1,13 +1,13 @@
 import { Handler } from 'aws-lambda';
 import * as logger from 'lambda-log';
-import { getActiveEvent } from '../../database/repository';
-import { ActionResultEventInfo, ACTION_STATUSES, IMessage } from '../../types';
+import { getActiveEvent } from '../database/repository';
+import { ActionResults, Actions, ActionStatuses, IMessage } from '../types';
 
 logger.options.tags.push('eventInfo');
 
-export const eventInfo: Handler<IMessage, ActionResultEventInfo> = async (
+export const eventInfo: Handler<IMessage, ActionResults[Actions.eventInfo]> = async (
   event,
-): Promise<ActionResultEventInfo> => {
+): Promise<ActionResults[Actions.eventInfo]> => {
   const { chatId } = event;
 
   logger.debug('command received', event);
@@ -15,11 +15,11 @@ export const eventInfo: Handler<IMessage, ActionResultEventInfo> = async (
   const activeEvent = await getActiveEvent({ chatId });
   if (!activeEvent) {
     logger.warn('active event does not exist', { chatId });
-    return { status: ACTION_STATUSES.EVENT_NOT_FOUND, body: {} };
+    return { status: ActionStatuses.eventNotFound, body: {} };
   }
 
   return {
-    status: ACTION_STATUSES.SUCCESS,
+    status: ActionStatuses.success,
     body: activeEvent,
   };
 };

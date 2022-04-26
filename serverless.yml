@@ -48,27 +48,27 @@ provider:
 
 functions:
   ping:
-    handler: src/lambda/ping.handler
+    handler: src/ping.handler
     events:
       - httpApi:
           path: /ping
           method: get
   telegram:
-    handler: src/lambda/telegram.handler
+    handler: src/telegram.handler
     events:
       - httpApi:
           path: /telegram
           method: post
   eventAdd:
-    handler: src/lambda/actions/event-add.eventAdd
+    handler: src/actions/event-add.eventAdd
   eventInfo:
-    handler: src/lambda/actions/event-info.eventInfo
+    handler: src/actions/event-info.eventInfo
   eventRemove:
-    handler: src/lambda/actions/event-remove.eventRemove
+    handler: src/actions/event-remove.eventRemove
   memberAdd:
-    handler: src/lambda/actions/member-add.memberAdd
+    handler: src/actions/member-add.memberAdd
   memberRemove:
-    handler: src/lambda/actions/member-remove.memberRemove
+    handler: src/actions/member-remove.memberRemove
 
 resources:
   Resources:
