@@ -16,7 +16,7 @@ import { ActionResult, Actions, IMessage, ActionStatuses, ActionResults } from '
 
 logger.options.tags.push('app');
 
-export const Actions_MAP: Record<Actions, Handler<IMessage, ActionResult>['name']> = {
+const Actions_MAP: Record<Actions, Handler<IMessage, ActionResult>['name']> = {
   [Actions.eventAdd]: eventAdd.name,
   [Actions.eventInfo]: eventInfo.name,
   [Actions.eventRemove]: eventRemove.name,
@@ -24,7 +24,7 @@ export const Actions_MAP: Record<Actions, Handler<IMessage, ActionResult>['name'
   [Actions.memberRemove]: memberRemove.name,
 };
 
-export const TEMPLATES_MAP = {
+const TEMPLATES_MAP = {
   [Actions.eventAdd]: eventAddTemplate,
   [Actions.eventInfo]: eventInfoTemplate,
   [Actions.eventRemove]: eventRemoveTemplate,
@@ -49,7 +49,7 @@ export async function processMessage(message: IMessage): Promise<string> {
   }
 
   const response: ActionResults[keyof ActionResults] = JSON.parse(Payload.toString());
-  const template: string = TEMPLATES_MAP[message.command][response.status][message.lang];
+  const template: string = TEMPLATES_MAP[message.command][response.status];
 
   return template;
 }

@@ -1,5 +1,10 @@
 import { Event } from './database/types';
 
+export enum Languages {
+  en = 'en',
+  ru = 'ru',
+}
+
 export enum Actions {
   eventAdd = 'event_add',
   eventRemove = 'event_remove',
@@ -47,7 +52,7 @@ export type ActionResults = {
 
 export interface IMessage {
   readonly chatId: number;
-  readonly lang: keyof LangBundle;
+  readonly lang: Languages;
   readonly text: string;
   readonly fullText: string;
   readonly command: Actions;
