@@ -1,4 +1,2 @@
-interface LangBundle {
-  readonly en: string;
-  readonly ru: string;
-}
+import { Languages } from '../types';
+export type LangBundle = Record<Languages, string>;

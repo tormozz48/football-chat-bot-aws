@@ -1,4 +1,5 @@
 import { ActionResults, Actions, ActionStatuses } from '../../types';
+import { LangBundle } from '../types';
 import * as eventAlreadyExists from './event-already-exists';
 import * as eventInvalidDate from './event-invalid-date';
 import * as eventInvalidDatePast from './event-invalid-date-past';

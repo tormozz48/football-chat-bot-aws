@@ -4,6 +4,8 @@ service: football-chat-bot-aws
 frameworkVersion: '3'
 
 custom:
+  serviceName: ${self:service}
+  stage: ${sls:stage}
   tableName: 'events-table-${sls:stage}'
   dynamodb:
     stages:
@@ -28,7 +30,12 @@ plugins:
 provider:
   name: aws
   runtime: nodejs14.x
+  versionFunctions: false
+  tracing:
+    lambda: true
   environment:
+    SERVICE_NAME: ${self:custom.serviceName}
+    STAGE: ${self:custom.stage}
     EVENTS_TABLE: ${self:custom.tableName}
     TELEGRAM_BOT_TOKEN: ${param:telegramBotToken}
     TELEGRAM_BOT_WEBHOOK_URL: ${param:telegramBotWebhookUrl}
@@ -45,6 +52,11 @@ provider:
             - dynamodb:DeleteItem
           Resource:
             - Fn::GetAtt: [ EventsTable, Arn ]
+        - Effect: Allow
+          Action:
+            - lambda:InvokeFunction
+          Resource:
+            - arn:aws:lambda:*
 
 functions:
   ping:
@@ -91,6 +103,3 @@ resources:
           -
             AttributeName: eventDate
             KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1

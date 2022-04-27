@@ -1,17 +1,17 @@
 import { Handler } from 'aws-lambda';
-import * as logger from 'lambda-log';
+import { LambdaLog } from 'lambda-log';
 import { isDateInPast, parseDate } from 'src/utils/date';
 import { createEvent, getActiveEvent, getEvent } from '../database/repository';
 import { ActionResults, ActionStatuses, IMessage, Actions } from '../types';
 
-logger.options.tags.push('eventAdd');
+const logger = new LambdaLog({ tags: ['eventAdd'] });
 
 export const eventAdd: Handler<IMessage, ActionResults[Actions.eventAdd]> = async (
   event,
 ): Promise<ActionResults[Actions.eventAdd]> => {
   const { chatId } = event;
 
-  logger.debug('command received', event);
+  logger.info('command received', event);
 
   let parsedDate = parseDate(event.text);
   if (!parsedDate.isValid()) {
@@ -37,7 +37,7 @@ export const eventAdd: Handler<IMessage, ActionResults[Actions.eventAdd]> = asyn
   await createEvent({ chatId, eventDate });
   const activeEvent = await getActiveEvent({ chatId });
 
-  logger.debug('event has been successfully created', activeEvent);
+  logger.info('event has been successfully created', activeEvent);
 
   return { status: ActionStatuses.success, body: activeEvent };
 };

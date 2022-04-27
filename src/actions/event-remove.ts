@@ -1,9 +1,9 @@
 import { Handler } from 'aws-lambda';
-import * as logger from 'lambda-log';
+import { LambdaLog } from 'lambda-log';
 import { getActiveEvent, removeEvent } from '../database/repository';
 import { ActionResults, Actions, ActionStatuses, IMessage } from '../types';
 
-logger.options.tags.push('eventRemove');
+const logger = new LambdaLog({ tags: ['eventRemove'] });
 
 export const eventRemove: Handler<IMessage, ActionResults[Actions.eventRemove]> = async (
   event,

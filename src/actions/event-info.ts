@@ -1,9 +1,9 @@
 import { Handler } from 'aws-lambda';
-import * as logger from 'lambda-log';
+import { LambdaLog } from 'lambda-log';
 import { getActiveEvent } from '../database/repository';
 import { ActionResults, Actions, ActionStatuses, IMessage } from '../types';
 
-logger.options.tags.push('eventInfo');
+const logger = new LambdaLog({ tags: ['eventInfo'] });
 
 export const eventInfo: Handler<IMessage, ActionResults[Actions.eventInfo]> = async (
   event,
