@@ -21,5 +21,5 @@ export interface Event {
   readonly eventDate: number;
   readonly active: number;
 
-  readonly members: EventMember[];
+  members: EventMember[];
 }

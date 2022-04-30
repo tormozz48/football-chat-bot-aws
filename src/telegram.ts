@@ -92,5 +92,5 @@ function extractText(command: Actions, ctx: Context & Context<Update.MessageUpda
   if (ctx.botInfo?.username) {
     text = text.replace(new RegExp(`@?${ctx.botInfo.username}`), '');
   }
-  return text;
+  return text.trim();
 }

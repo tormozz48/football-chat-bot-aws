@@ -1,9 +1,11 @@
-import { Handler } from 'aws-lambda';
 import { LambdaLog } from 'lambda-log';
-import { getActiveEvent, removeEvent } from '../database/repository';
+import { removeEvent } from '../database/repository';
 import { ActionResults, Actions, ActionStatuses, IMessage } from '../types';
+import { resolveActiveEvent, wrapper } from './utils';
 
 const logger = new LambdaLog({ tags: ['eventRemove'] });
+
+export const eventRemove = wrapper<Actions.eventRemove>(eventRemoveFn);
 
 /**
  * Removes current active event
@@ -11,16 +13,10 @@ const logger = new LambdaLog({ tags: ['eventRemove'] });
  * @param  {IMessage} message
  * @return Promise<ActionResults[Actions.eventRemove]>
  */
-export async function eventRemove(message: IMessage): Promise<ActionResults[Actions.eventRemove]> {
+async function eventRemoveFn(message: IMessage): Promise<ActionResults[Actions.eventRemove]> {
   const { chatId } = message;
 
-  logger.debug('command received', message);
-
-  const activeEvent = await getActiveEvent({ chatId });
-  if (!activeEvent) {
-    logger.warn('active event does not exist', { chatId });
-    return { status: ActionStatuses.eventNotFound, body: {} };
-  }
+  const activeEvent = await resolveActiveEvent(chatId);
 
   await removeEvent({ chatId: activeEvent.chatId, eventDate: activeEvent.eventDate });
   logger.debug('event has been removed', activeEvent);

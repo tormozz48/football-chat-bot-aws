@@ -24,6 +24,7 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
       handler: eventInfo,
     });
   });
+
   it('success', async () => {
     const chatId = faker.datatype.number();
     const dateInMillis = faker.date.future().getTime();

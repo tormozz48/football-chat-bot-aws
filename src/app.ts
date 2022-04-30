@@ -1,5 +1,5 @@
-import * as AWS from 'aws-sdk';
 import { Handler } from 'aws-lambda';
+import * as AWS from 'aws-sdk';
 import { LambdaLog } from 'lambda-log';
 import { eventAdd } from './actions/event-add';
 import { eventInfo } from './actions/event-info';
@@ -11,7 +11,7 @@ import { template as eventInfoTemplate } from './templates/event-info';
 import { template as eventRemoveTemplate } from './templates/event-remove';
 import { template as memberAddTemplate } from './templates/member-add';
 import { template as memberRemoveTemplate } from './templates/member-remove';
-import { ActionResult, Actions, IMessage, ActionStatuses, ActionResults } from './types';
+import { ActionResult, ActionResults, Actions, IMessage } from './types';
 
 const logger = new LambdaLog({ tags: ['app'] });
 

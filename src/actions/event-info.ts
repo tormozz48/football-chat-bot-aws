@@ -1,9 +1,7 @@
-import { Handler } from 'aws-lambda';
-import { LambdaLog } from 'lambda-log';
-import { getActiveEvent } from '../database/repository';
 import { ActionResults, Actions, ActionStatuses, IMessage } from '../types';
+import { resolveActiveEvent, wrapper } from './utils';
 
-const logger = new LambdaLog({ tags: ['eventInfo'] });
+export const eventInfo = wrapper<Actions.eventInfo>(eventInfoFn);
 
 /**
  * Show information about current active event
@@ -11,17 +9,10 @@ const logger = new LambdaLog({ tags: ['eventInfo'] });
  * @param  {IMessage} message
  * @return Promise<ActionResults[Actions.eventInfo]>
  */
-export async function eventInfo(message: IMessage): Promise<ActionResults[Actions.eventInfo]> {
+async function eventInfoFn(message: IMessage): Promise<ActionResults[Actions.eventInfo]> {
   const { chatId } = message;
 
-  logger.debug('command received', message);
-
-  const activeEvent = await getActiveEvent({ chatId });
-  if (!activeEvent) {
-    logger.warn('active event does not exist', { chatId });
-    return { status: ActionStatuses.eventNotFound, body: {} };
-  }
-
+  const activeEvent = await resolveActiveEvent(chatId);
   return {
     status: ActionStatuses.success,
     body: activeEvent,

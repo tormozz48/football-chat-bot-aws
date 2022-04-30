@@ -16,16 +16,7 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
     memberName: faker.datatype.string(),
   });
 
-  beforeAll(() => {
-    eventAddAction = lambdaWrapper.wrap<IMessage, ActionResults[Actions.eventAdd]>({
-      handler: eventAdd,
-    });
-    memberAddAction = lambdaWrapper.wrap<IMessage, ActionResults[Actions.memberAdd]>({
-      handler: memberAdd,
-    });
-  });
-  it('success', async () => {
-    const chatId = faker.datatype.number();
+  const createEvent = async (chatId: number) => {
     const dateInMillis = faker.date.future().getTime();
     const date = formatDate(dateInMillis);
 
@@ -36,6 +27,21 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
       action: Actions[Actions.eventAdd],
       fullText: `/event_add ${date}`,
     });
+  };
+
+  beforeAll(() => {
+    eventAddAction = lambdaWrapper.wrap<IMessage, ActionResults[Actions.eventAdd]>({
+      handler: eventAdd,
+    });
+    memberAddAction = lambdaWrapper.wrap<IMessage, ActionResults[Actions.memberAdd]>({
+      handler: memberAdd,
+    });
+  });
+
+  it('success', async () => {
+    const chatId = faker.datatype.number();
+
+    await createEvent(chatId);
 
     const memberName = faker.datatype.string();
     const response = await memberAddAction.run({
@@ -57,16 +63,8 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
 
   it('append another person', async () => {
     const chatId = faker.datatype.number();
-    const dateInMillis = faker.date.future().getTime();
-    const date = formatDate(dateInMillis);
 
-    await eventAddAction.run({
-      ...createPayloadBaseParams(),
-      chatId,
-      text: date,
-      action: Actions[Actions.eventAdd],
-      fullText: `/event_add ${date}`,
-    });
+    await createEvent(chatId);
 
     const anotherPersonName = faker.datatype.string();
     const response = await memberAddAction.run({
@@ -103,16 +101,8 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
 
     it(`status: ${ActionStatuses.memberAlreadyAdded} (case #1)`, async () => {
       const chatId = faker.datatype.number();
-      const dateInMillis = faker.date.future().getTime();
-      const date = formatDate(dateInMillis);
 
-      await eventAddAction.run({
-        ...createPayloadBaseParams(),
-        chatId,
-        text: date,
-        action: Actions[Actions.eventAdd],
-        fullText: `/event_add ${date}`,
-      });
+      await createEvent(chatId);
 
       const memberName = faker.datatype.string();
       const message: IMessage = {
@@ -133,16 +123,8 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
 
     it(`status: ${ActionStatuses.memberAlreadyAdded} (case #2)`, async () => {
       const chatId = faker.datatype.number();
-      const dateInMillis = faker.date.future().getTime();
-      const date = formatDate(dateInMillis);
 
-      await eventAddAction.run({
-        ...createPayloadBaseParams(),
-        chatId,
-        text: date,
-        action: Actions[Actions.eventAdd],
-        fullText: `/event_add ${date}`,
-      });
+      await createEvent(chatId);
 
       const memberName = faker.datatype.string();
       const message: IMessage = {
