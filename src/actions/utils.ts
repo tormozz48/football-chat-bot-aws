@@ -56,7 +56,10 @@ export function wrapper<T extends Actions>(fn: (message: IMessage) => Promise<Ac
       }
 
       logger.error('Unhandled error occurred', { error });
-      throw error;
+      return {
+        status: ActionStatuses.fail,
+        body: {},
+      } as ActionResults[T];
     }
   };
 }

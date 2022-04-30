@@ -30,21 +30,26 @@ export type ActionResult<T = ActionStatuses, U = {}> = { status: T; body: U };
 
 export type ActionResults = {
   [Actions.eventAdd]:
+    | ActionResult<ActionStatuses.fail>
     | ActionResult<ActionStatuses.eventInvalidDate>
     | ActionResult<ActionStatuses.eventInvalidDatePast>
     | ActionResult<ActionStatuses.eventAlreadyExists, Event>
     | ActionResult<ActionStatuses.success, Event>;
   [Actions.eventInfo]:
+    | ActionResult<ActionStatuses.fail>
     | ActionResult<ActionStatuses.eventNotFound>
     | ActionResult<ActionStatuses.success, Event>;
   [Actions.eventRemove]:
+    | ActionResult<ActionStatuses.fail>
     | ActionResult<ActionStatuses.eventNotFound>
     | ActionResult<ActionStatuses.success, Event>;
   [Actions.memberAdd]:
+    | ActionResult<ActionStatuses.fail>
     | ActionResult<ActionStatuses.eventNotFound>
     | ActionResult<ActionStatuses.memberAlreadyAdded, Member & Event>
     | ActionResult<ActionStatuses.success, Member & Event>;
   [Actions.memberRemove]:
+    | ActionResult<ActionStatuses.fail>
     | ActionResult<ActionStatuses.eventNotFound>
     | ActionResult<ActionStatuses.memberNotFound, Member & Event>
     | ActionResult<ActionStatuses.success, Member & Event>;

@@ -26,7 +26,7 @@ async function memberRemoveFn(message: IMessage): Promise<ActionResults[Actions.
     throw new ActionError(ActionStatuses.memberNotFound, { ...activeEvent, name: targetPerson });
   }
 
-  activeEvent.members = activeEvent.members.splice(memberIndex, 1);
+  activeEvent.members.splice(memberIndex, 1);
   await updateEventMembers(activeEvent);
 
   logger.info('member has been removed', { chatId, targetPerson });
