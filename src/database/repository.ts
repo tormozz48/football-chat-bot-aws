@@ -117,13 +117,15 @@ export async function createEvent(params: CreateEventParam): Promise<void> {
  * @return Promise<void>
  */
 export async function updateEventMembers(params: UpdateEventMembersParam): Promise<void> {
-  await dynamoDBDocumentClient.update({
-    ...eventsTableName,
-    Key: { chatId: params.chatId, eventDate: params.eventDate },
-    UpdateExpression: 'SET members = :m',
-    ExpressionAttributeValues: { ':m': params.members },
-    ReturnValues: 'ALL_NEW',
-  });
+  await dynamoDBDocumentClient
+    .update({
+      ...eventsTableName,
+      Key: { chatId: params.chatId, eventDate: params.eventDate },
+      UpdateExpression: 'SET members = :m',
+      ExpressionAttributeValues: { ':m': params.members },
+      ReturnValues: 'ALL_NEW',
+    })
+    .promise();
 }
 
 /**
@@ -150,10 +152,12 @@ export async function deativateEvent(params: DeactivateEventParam): Promise<void
  * @return Promise<void>
  */
 export async function removeEvent(params: RemoveEventParam): Promise<void> {
-  await dynamoDBDocumentClient.delete({
-    ...eventsTableName,
-    Key: params,
-  });
+  await dynamoDBDocumentClient
+    .delete({
+      ...eventsTableName,
+      Key: params,
+    })
+    .promise();
 }
 
 // private

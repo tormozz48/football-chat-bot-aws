@@ -5,12 +5,16 @@ import { ActionResults, Actions, ActionStatuses, IMessage } from '../types';
 
 const logger = new LambdaLog({ tags: ['eventInfo'] });
 
-export const eventInfo: Handler<IMessage, ActionResults[Actions.eventInfo]> = async (
-  event,
-): Promise<ActionResults[Actions.eventInfo]> => {
-  const { chatId } = event;
+/**
+ * Show information about current active event
+ * @export
+ * @param  {IMessage} message
+ * @return Promise<ActionResults[Actions.eventInfo]>
+ */
+export async function eventInfo(message: IMessage): Promise<ActionResults[Actions.eventInfo]> {
+  const { chatId } = message;
 
-  logger.debug('command received', event);
+  logger.debug('command received', message);
 
   const activeEvent = await getActiveEvent({ chatId });
   if (!activeEvent) {
@@ -22,4 +26,4 @@ export const eventInfo: Handler<IMessage, ActionResults[Actions.eventInfo]> = as
     status: ActionStatuses.success,
     body: activeEvent,
   };
-};
+}

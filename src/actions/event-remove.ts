@@ -5,12 +5,16 @@ import { ActionResults, Actions, ActionStatuses, IMessage } from '../types';
 
 const logger = new LambdaLog({ tags: ['eventRemove'] });
 
-export const eventRemove: Handler<IMessage, ActionResults[Actions.eventRemove]> = async (
-  event,
-): Promise<ActionResults[Actions.eventRemove]> => {
-  const { chatId } = event;
+/**
+ * Removes current active event
+ * @export
+ * @param  {IMessage} message
+ * @return Promise<ActionResults[Actions.eventRemove]>
+ */
+export async function eventRemove(message: IMessage): Promise<ActionResults[Actions.eventRemove]> {
+  const { chatId } = message;
 
-  logger.debug('command received', event);
+  logger.debug('command received', message);
 
   const activeEvent = await getActiveEvent({ chatId });
   if (!activeEvent) {
@@ -22,4 +26,4 @@ export const eventRemove: Handler<IMessage, ActionResults[Actions.eventRemove]> 
   logger.debug('event has been removed', activeEvent);
 
   return { status: ActionStatuses.success, body: activeEvent };
-};
+}

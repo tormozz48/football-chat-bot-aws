@@ -7,16 +7,18 @@ import { ActionResults, Actions, ActionStatuses, IMessage, Languages } from '../
 import { eventAdd } from './event-add';
 
 describe(`${path.relative(process.cwd(), __filename)}`, () => {
-  let wrapped: Wrapped<IMessage, ActionResults['event_add']>;
+  let eventAddAction: Wrapped<IMessage, ActionResults[Actions.eventAdd]>;
 
   const createPayloadBaseParams = () => ({
-    lang: Languages['en'],
-    action: Actions['eventAdd'],
+    lang: Languages.en,
+    action: Actions.eventAdd,
     memberName: faker.datatype.string(),
   });
 
   beforeAll(() => {
-    wrapped = lambdaWrapper.wrap<IMessage, ActionResults['event_add']>({ handler: eventAdd });
+    eventAddAction = lambdaWrapper.wrap<IMessage, ActionResults[Actions.eventAdd]>({
+      handler: eventAdd,
+    });
   });
 
   it('success', async () => {
@@ -24,7 +26,7 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
     const dateInMillis = faker.date.future().getTime();
     const date = formatDate(dateInMillis);
 
-    const response = await wrapped.run({
+    const response = await eventAddAction.run({
       ...createPayloadBaseParams(),
       chatId,
       text: date,
@@ -45,7 +47,7 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
       const chatId = faker.datatype.number();
       const date = 'Invalid Date';
 
-      const response = await wrapped.run({
+      const response = await eventAddAction.run({
         ...createPayloadBaseParams(),
         chatId,
         text: date,
@@ -60,7 +62,7 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
       const chatId = faker.datatype.number();
       const date = formatDate(faker.date.past().getTime());
 
-      const response = await wrapped.run({
+      const response = await eventAddAction.run({
         ...createPayloadBaseParams(),
         chatId,
         text: date,
@@ -82,10 +84,10 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
         fullText: `/event_add ${date}`,
       };
 
-      const firstCallResponse = await wrapped.run(payload);
+      const firstCallResponse = await eventAddAction.run(payload);
       expect(firstCallResponse.status).toEqual(ActionStatuses.success);
 
-      const secondCallResponse = await wrapped.run(payload);
+      const secondCallResponse = await eventAddAction.run(payload);
       expect(secondCallResponse.status).toEqual(ActionStatuses.eventAlreadyExists);
     });
   });

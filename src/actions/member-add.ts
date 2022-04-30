@@ -8,9 +8,9 @@ const logger = new LambdaLog({ tags: ['memberAdd'] });
 export const memberAdd: Handler<IMessage, ActionResults[Actions.memberAdd]> = async (
   event,
 ): Promise<ActionResults[Actions.memberAdd]> => {
-  const { chatId, memberName } = event;
+  const { chatId, text: anotherPerson, memberName: selfPerson } = event;
 
-  logger.debug('command received', event);
+  logger.info('command received', event);
 
   const activeEvent = await getActiveEvent({ chatId });
   if (!activeEvent) {
@@ -18,20 +18,22 @@ export const memberAdd: Handler<IMessage, ActionResults[Actions.memberAdd]> = as
     return { status: ActionStatuses.eventNotFound, body: {} };
   }
 
-  const memberAlreadyExists = activeEvent.members.some(({ name }) => name === memberName);
+  const targetPerson = anotherPerson || selfPerson;
+
+  const memberAlreadyExists = activeEvent.members.some(({ name }) => name === targetPerson);
   if (memberAlreadyExists) {
-    logger.warn('member has already been added', { chatId, memberName });
+    logger.warn('member has already been added', { chatId, targetPerson });
     return {
       status: ActionStatuses.memberAlreadyAdded,
-      body: { ...activeEvent, name: memberName },
+      body: { ...activeEvent, name: targetPerson },
     };
   }
 
-  activeEvent.members.push({ name: memberName });
+  activeEvent.members.push({ name: targetPerson });
   await updateEventMembers(activeEvent);
 
-  logger.debug('member has been added', { chatId, memberName });
+  logger.info('member has been added', { chatId, targetPerson });
 
   const updatedEvent = await getActiveEvent({ chatId });
-  return { status: ActionStatuses.success, body: { ...updatedEvent, name: memberName } };
+  return { status: ActionStatuses.success, body: { ...updatedEvent, name: targetPerson } };
 };
