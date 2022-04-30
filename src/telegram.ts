@@ -44,7 +44,7 @@ export const handler = telegrafAws(bot, { timeout: 1000 });
 
 // private
 
-function composeMessage(command: Actions, ctx: Context & Context<Update.MessageUpdate>): IMessage {
+function composeMessage(action: Actions, ctx: Context & Context<Update.MessageUpdate>): IMessage {
   const { message } = ctx.update;
   const firstName: string = message.from.first_name || '';
   const lastName: string = message.from.last_name || '';
@@ -53,9 +53,9 @@ function composeMessage(command: Actions, ctx: Context & Context<Update.MessageU
   return {
     chatId: adjustChatId(message.chat.id),
     lang: detectLanguage(ctx),
-    text: extractText(command, ctx),
+    text: extractText(action, ctx),
     fullText: message['text'],
-    command,
+    action,
     memberName,
   };
 }

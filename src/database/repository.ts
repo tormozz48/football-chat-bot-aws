@@ -11,6 +11,13 @@ import {
 
 const eventsTableName = { TableName: process.env.EVENTS_TABLE };
 
+/**
+ * Get list of all events for given chat identifier
+ * @export
+ * @template T
+ * @param  {ChatIdParam} { chatId } - unique chat identifier
+ * @return Promise<T[]>
+ */
 export async function getEvents<T = Event>({ chatId }: ChatIdParam): Promise<T[]> {
   const { Items } = await dynamoDBDocumentClient
     .query({
@@ -23,6 +30,13 @@ export async function getEvents<T = Event>({ chatId }: ChatIdParam): Promise<T[]
   return Items as T[];
 }
 
+/**
+ * Get event by chat identifier and event date
+ * @export
+ * @template T
+ * @param  {GetEventParam} params - unique event params
+ * @return Promise<T>
+ */
 export async function getEvent<T = Event>(params: GetEventParam): Promise<T> {
   const { Item } = await dynamoDBDocumentClient
     .get({
@@ -34,6 +48,13 @@ export async function getEvent<T = Event>(params: GetEventParam): Promise<T> {
   return Item as T;
 }
 
+/**
+ * Get list of active events for given chat identifier
+ * @export
+ * @template T
+ * @param  {ChatIdParam} { chatId } - unique chat identifier
+ * @return Promise<T[]>
+ */
 export async function getActiveEvents<T = Event>({ chatId }: ChatIdParam): Promise<T[]> {
   const { Items } = await dynamoDBDocumentClient
     .query({
@@ -45,6 +66,13 @@ export async function getActiveEvents<T = Event>({ chatId }: ChatIdParam): Promi
   return Items as T[];
 }
 
+/**
+ * Get last active event for given chat identifier
+ * @export
+ * @template T
+ * @param  {ChatIdParam} { chatId } - unique chat identifier
+ * @return Promise<T>
+ */
 export async function getActiveEvent<T = Event>({ chatId }: ChatIdParam): Promise<T> {
   const { Items } = await dynamoDBDocumentClient
     .query({
@@ -58,6 +86,12 @@ export async function getActiveEvent<T = Event>({ chatId }: ChatIdParam): Promis
   return Items[0] as T;
 }
 
+/**
+ * Create event with given event params
+ * @export
+ * @param  {CreateEventParam} params
+ * @return Promise<void>
+ */
 export async function createEvent(params: CreateEventParam): Promise<void> {
   const events = await getActiveEvents(params);
   for (const { chatId, eventDate } of events) {
@@ -69,12 +103,19 @@ export async function createEvent(params: CreateEventParam): Promise<void> {
       ...eventsTableName,
       Item: {
         ...params,
+        active: 1,
         members: [],
       },
     })
     .promise();
 }
 
+/**
+ * Update set of members for given event params
+ * @export
+ * @param  {UpdateEventMembersParam} params
+ * @return Promise<void>
+ */
 export async function updateEventMembers(params: UpdateEventMembersParam): Promise<void> {
   await dynamoDBDocumentClient.update({
     ...eventsTableName,
@@ -85,6 +126,12 @@ export async function updateEventMembers(params: UpdateEventMembersParam): Promi
   });
 }
 
+/**
+ * Deactivate event for given event params
+ * @export
+ * @param  {DeactivateEventParam} params
+ * @return Promise<void>
+ */
 export async function deativateEvent(params: DeactivateEventParam): Promise<void> {
   await dynamoDBDocumentClient
     .update({
@@ -96,6 +143,12 @@ export async function deativateEvent(params: DeactivateEventParam): Promise<void
     .promise();
 }
 
+/**
+ * Remove event for given event params
+ * @export
+ * @param  {RemoveEventParam} params
+ * @return Promise<void>
+ */
 export async function removeEvent(params: RemoveEventParam): Promise<void> {
   await dynamoDBDocumentClient.delete({
     ...eventsTableName,

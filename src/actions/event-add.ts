@@ -1,6 +1,6 @@
 import { Handler } from 'aws-lambda';
 import { LambdaLog } from 'lambda-log';
-import { isDateInPast, parseDate } from 'src/utils/date';
+import { isDateInPast, parseDate } from '../utils/date';
 import { createEvent, getActiveEvent, getEvent } from '../database/repository';
 import { ActionResults, ActionStatuses, IMessage, Actions } from '../types';
 
@@ -14,7 +14,8 @@ export const eventAdd: Handler<IMessage, ActionResults[Actions.eventAdd]> = asyn
   logger.info('command received', event);
 
   let parsedDate = parseDate(event.text);
-  if (!parsedDate.isValid()) {
+  console.log(parsedDate);
+  if (!parsedDate.isValid) {
     logger.warn('event date invalid', { chatId, date: event.text });
     return { status: ActionStatuses.eventInvalidDate, body: {} };
   }

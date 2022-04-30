@@ -55,6 +55,6 @@ export interface IMessage {
   readonly lang: Languages;
   readonly text: string;
   readonly fullText: string;
-  readonly command: Actions;
+  readonly action: Actions;
   readonly memberName: string;
 }

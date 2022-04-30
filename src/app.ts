@@ -20,7 +20,7 @@ const stage = process.env.STAGE;
 
 logger.info(`environment parameters`, { serviceName, stage });
 
-const Actions_MAP: Record<Actions, Handler<IMessage, ActionResult>['name']> = {
+const ActionsMap: Record<Actions, Handler<IMessage, ActionResult>['name']> = {
   [Actions.eventAdd]: eventAdd.name,
   [Actions.eventInfo]: eventInfo.name,
   [Actions.eventRemove]: eventRemove.name,
@@ -28,7 +28,7 @@ const Actions_MAP: Record<Actions, Handler<IMessage, ActionResult>['name']> = {
   [Actions.memberRemove]: memberRemove.name,
 };
 
-const TEMPLATES_MAP = {
+const templatesMap = {
   [Actions.eventAdd]: eventAddTemplate,
   [Actions.eventInfo]: eventInfoTemplate,
   [Actions.eventRemove]: eventRemoveTemplate,
@@ -41,7 +41,7 @@ export async function processMessage(message: IMessage): Promise<string> {
 
   const { StatusCode, FunctionError, Payload } = await new AWS.Lambda()
     .invoke({
-      FunctionName: `${serviceName}-${stage}-${Actions_MAP[message.command]}`,
+      FunctionName: `${serviceName}-${stage}-${ActionsMap[message.action]}`,
       InvocationType: 'Event',
       Payload: JSON.stringify(message),
     })
@@ -55,7 +55,7 @@ export async function processMessage(message: IMessage): Promise<string> {
   }
 
   const response: ActionResults[keyof ActionResults] = JSON.parse(Payload.toString());
-  const template = TEMPLATES_MAP[message.command][response.status][message.lang];
+  const template = templatesMap[message.action][response.status][message.lang];
 
   return template;
 }

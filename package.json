@@ -27,7 +27,8 @@
     "dev": "serverless offline",
     "deploy": "serverless deploy",
     "pretest": "serverless dynamodb migrate",
-    "test": "jest",
+    "test": "jest --silent",
+    "test:debug": "jest --runInBand",
     "coverage": "jest --coverage",
     "db-start": "serverless dynamodb start --migrate",
     "db-gui": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin"
@@ -35,9 +36,9 @@
   "dependencies": {
     "@aws-sdk/lib-dynamodb": "^3.76.0",
     "aws-sdk": "^2.1120.0",
-    "dayjs": "^1.11.1",
     "handlebars": "^4.7.7",
     "lambda-log": "^3.1.0",
+    "luxon": "^2.3.2",
     "serverless-dynamodb-client": "0.0.2",
     "serverless-http": "^2.7.0",
     "telegraf": "^4.7.0",
@@ -45,9 +46,11 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.94",
+    "@types/faker": "5.5.3",
     "@types/jest": "^27.4.1",
     "@types/lambda-log": "^2.2.1",
     "@types/lambda-wrapper": "^0.3.1",
+    "@types/luxon": "^2.3.1",
     "@types/serverless-jest-plugin": "^0.3.0",
     "@typescript-eslint/parser": "^5.19.0",
     "dynamodb-admin": "^4.1.0",

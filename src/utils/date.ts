@@ -1,19 +1,34 @@
-import * as dayjs from 'dayjs';
-import * as utc from 'dayjs/plugin/utc';
+import { DateTime } from 'luxon';
 
-dayjs.extend(utc);
+const dateFormat = 'dd-MM-yyyy HH:mm';
 
-const ALLOWED_DATE_FORMATS = ['DD-MM-YYYY HH:mm'];
-const REFERENCE_DATE_FORMAT = ALLOWED_DATE_FORMATS[0];
+/**
+ * Parse given date string
+ * @export
+ * @param  {string} dateStr
+ * @return DateTime
+ */
+export function parseDate(dateStr: string): DateTime {
+  return DateTime.fromFormat(dateStr, dateFormat).toUTC();
+}
 
-export const parseDate = (dateStr: string): dayjs.Dayjs => {
-  return dayjs(dateStr, ALLOWED_DATE_FORMATS, true).utc();
-};
+/**
+ * Returns true if given date less then current date. Otherwise returns false
+ * @export
+ * @param  {DateTime} date
+ * @return boolean
+ */
+export function isDateInPast(date: DateTime): boolean {
+  return date.toMillis() < DateTime.utc().toMillis();
+}
 
-export const isDateInPast = (date: dayjs.Dayjs): boolean => {
-  return date.isBefore(dayjs().utc());
-};
-
-export const formatDate = (date: dayjs.Dayjs | number): string => {
-  return dayjs(date).utc().format(REFERENCE_DATE_FORMAT);
-};
+/**
+ * Returns formatted date string
+ * @export
+ * @param  {(DateTime | number)} date
+ * @return string
+ */
+export function formatDate(date: DateTime | number): string {
+  date = date instanceof DateTime ? date : DateTime.fromMillis(date);
+  return date.toFormat(dateFormat);
+}
