@@ -35,13 +35,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Setup local DynamoDB
-        run: docker run -p 8000:8000 amazon/dynamodb-local &
+        run: docker-compose up -d
       - name: Install dependencies
         run: npm ci
       - name: Build
         run: npm run build --if-present
-      - name: Check for DynamoDB
-        run: npx ts-node ./test/check-for-db.ts
+      # - name: Check for DynamoDB
+      #   run: npx ts-node ./test/check-for-db.ts
       - run: npm run pretest
       - name: Run Unit-Tests
         run: npm run test:ci

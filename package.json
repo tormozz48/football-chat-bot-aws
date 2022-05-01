@@ -26,7 +26,7 @@
     "lint:fix": "eslint --fix 'src/**/*.ts'",
     "dev": "serverless offline",
     "deploy": "serverless deploy",
-    "pretest": "serverless dynamodb migrate",
+    "pretest": "ts-node ./test/check-for-db.ts && serverless dynamodb migrate",
     "test": "jest --silent",
     "test:debug": "jest --runInBand",
     "test:ci": "jest --silent --coverage",
