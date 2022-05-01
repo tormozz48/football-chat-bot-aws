@@ -1,4 +1,4 @@
-import { ActionResult, ActionResults, Actions, ActionStatuses } from 'src/types';
+import { ActionResult, ActionResults, Actions, ActionStatuses, Member } from 'src/types';
 import { Template } from './types';
 import { Event } from '../database/types';
 
@@ -17,10 +17,11 @@ const success: Template<Actions.memberRemove, ActionStatuses.success> = {
   beforeApply: (data: ActionResults[Actions.memberRemove]) => {
     const { body } = data as ActionResults[Actions.memberRemove]['body'] as ActionResult<
       ActionStatuses.success,
-      Event
+      Event & Member
     >;
 
     return {
+      name: body.name,
       eventDate: body.eventDate,
       members: body.members.map(({ name }, index) => ({ index, name })),
       total: body.members.length,

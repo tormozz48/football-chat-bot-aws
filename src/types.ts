@@ -24,7 +24,7 @@ export enum ActionStatuses {
   memberAlreadyAdded = 'already_added',
 }
 
-type Member = { name: string };
+export type Member = { name: string };
 
 export type ActionResult<T = ActionStatuses, U = {}> = { status: T; body: U };
 
