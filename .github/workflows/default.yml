@@ -38,4 +38,4 @@ jobs:
         run: docker run -p 8000:8000 amazon/dynamodb-local &
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm run coverage
+      - run: npm run test:ci

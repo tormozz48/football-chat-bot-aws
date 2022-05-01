@@ -1,6 +1,5 @@
 import * as AWS from 'aws-sdk';
 import { offlineOptions } from '../src/database/dynamodb';
-import { setTimeout } from 'timers/promises';
 
 const dynamodb = new AWS.DynamoDB(offlineOptions);
 
@@ -9,7 +8,7 @@ const waitForDynamoDbToStart = async () => {
     await dynamodb.listTables().promise();
   } catch (error) {
     console.log('Waiting for Docker container to start...');
-    await setTimeout(500);
+    await new Promise((resolve) => setTimeout(resolve, 500));
     return waitForDynamoDbToStart();
   }
 };
