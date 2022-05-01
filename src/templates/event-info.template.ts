@@ -2,6 +2,7 @@ import { Actions } from 'src/types';
 import { Template } from './types';
 import { ActionStatuses, ActionResults, ActionResult } from '../types';
 import { Event } from '../database/types';
+import { formatDate } from '../utils/date';
 
 export const templates = [
   <Template<Actions.eventInfo, ActionStatuses.success>>{
@@ -14,7 +15,7 @@ export const templates = [
       >;
 
       return {
-        eventDate: body.eventDate,
+        eventDate: formatDate(body.eventDate),
         members: body.members.map(({ name }, index) => ({ index, name })),
         total: body.members.length,
       };

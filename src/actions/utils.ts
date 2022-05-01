@@ -46,7 +46,9 @@ export function wrapper<T extends Actions>(fn: (message: IMessage) => Promise<Ac
   return async (message: IMessage): Promise<ActionResults[T]> => {
     try {
       logger.info('command received', message);
-      return await fn(message);
+      const response = await fn(message);
+      logger.info('command completed', response);
+      return response;
     } catch (error) {
       if (error instanceof ActionError) {
         return {

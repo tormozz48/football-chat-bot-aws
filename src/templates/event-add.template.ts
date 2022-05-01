@@ -1,5 +1,7 @@
-import { Actions, ActionStatuses } from 'src/types';
+import { ActionResult, ActionResults, Actions, ActionStatuses } from 'src/types';
+import { formatDate } from 'src/utils/date';
 import { Template } from './types';
+import { Event } from '../database/types';
 
 const eventInvalidDate: Template<Actions.eventAdd, ActionStatuses.eventInvalidDate> = {
   action: Actions.eventAdd,
@@ -47,9 +49,19 @@ const eventAlreadyExists: Template<Actions.eventAdd, ActionStatuses.eventAlready
 const success: Template<Actions.eventAdd, ActionStatuses.success> = {
   action: Actions.eventAdd,
   status: ActionStatuses.success,
+  beforeApply: (data: ActionResults[Actions.eventAdd]) => {
+    const { body } = data as ActionResults[Actions.eventAdd] as ActionResult<
+      ActionStatuses.success,
+      Event
+    >;
+
+    return {
+      eventDate: formatDate(body.eventDate),
+    };
+  },
   bundle: {
     en: [
-      '⚽️<strong>New Event is coming</strong>⚽️',
+      '🛎<strong>New Event is coming</strong>🛎',
       '',
       '🗓 <i>Date: {{eventDate}}</i>',
       '',
@@ -59,7 +71,7 @@ const success: Template<Actions.eventAdd, ActionStatuses.success> = {
       '4️⃣ View information about upcoming event: <strong>/info</strong>',
     ],
     ru: [
-      '⚽️<strong>Новое событие</strong>⚽️',
+      '🛎<strong>Новое событие</strong>🛎',
       '',
       '🗓 <i>Дата: {{eventDate}}</i>',
       '',

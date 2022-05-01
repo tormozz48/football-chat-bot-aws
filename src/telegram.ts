@@ -25,7 +25,7 @@ logger.info('telegraf bot has been initialized', {
     try {
       const message = composeMessage(command, ctx);
       const response = await processMessage(message);
-      return ctx.reply(response);
+      return ctx.replyWithHTML(response);
     } catch (error) {
       logger.error(error);
       return ctx.reply(error);
@@ -34,7 +34,6 @@ logger.info('telegraf bot has been initialized', {
 });
 
 bot.command('help', (ctx: Context) => {
-  logger.options.tags.push('help');
   logger.info('help command received', ctx);
 
   return ctx.reply('Try send a sticker!');

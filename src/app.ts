@@ -24,11 +24,11 @@ const stage = process.env.STAGE;
 logger.info(`environment parameters`, { serviceName, stage });
 
 const ActionsMap: Record<Actions, Handler<IMessage, ActionResult>['name']> = {
-  [Actions.eventAdd]: eventAdd.name,
-  [Actions.eventInfo]: eventInfo.name,
-  [Actions.eventRemove]: eventRemove.name,
-  [Actions.memberAdd]: memberAdd.name,
-  [Actions.memberRemove]: memberRemove.name,
+  [Actions.eventAdd]: 'eventAdd',
+  [Actions.eventInfo]: 'eventInfo',
+  [Actions.eventRemove]: 'eventRemove',
+  [Actions.memberAdd]: 'memberAdd',
+  [Actions.memberRemove]: 'memberRemove',
 };
 
 const templates = [
@@ -46,7 +46,6 @@ export async function processMessage(message: IMessage): Promise<string> {
   const { StatusCode, FunctionError, Payload } = await new AWS.Lambda()
     .invoke({
       FunctionName: `${serviceName}-${stage}-${ActionsMap[message.action]}`,
-      InvocationType: 'Event',
       Payload: JSON.stringify(message),
     })
     .promise();
@@ -71,7 +70,7 @@ function applyTemplate<A extends Actions>(
   const template = templates.find(
     ({ action, status }) => action === message.action && status === actionResult.status,
   );
-  const data = template.beforeApply ? template.beforeApply(actionResult.body) : actionResult.body;
+  const data = template.beforeApply ? template.beforeApply(actionResult) : actionResult.body;
   logger.info('apply template', {
     action: message.action,
     status: actionResult.status,
