@@ -40,8 +40,9 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build --if-present
-      - name: Check for DynamoDB
-        run: ts-node ./test/check-for-db.ts
-      - run: npm run pretest
+      # - name: Check for DynamoDB
+      #   run: ts-node ./test/check-for-db.ts
+      - name: Prepare Tests
+        run: npm run pretest
       - name: Run Unit-Tests
         run: npm run test:ci
