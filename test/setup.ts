@@ -1,5 +1,5 @@
 import * as AWS from 'aws-sdk';
-import { offlineOptions } from 'src/database/dynamodb';
+import { offlineOptions } from '../src/database/dynamodb';
 import { setTimeout } from 'timers/promises';
 
 const dynamodb = new AWS.DynamoDB(offlineOptions);
