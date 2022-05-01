@@ -139,7 +139,8 @@ export async function deativateEvent(params: DeactivateEventParam): Promise<void
     .update({
       ...eventsTableName,
       Key: params,
-      UpdateExpression: 'SET active = 0',
+      UpdateExpression: 'SET active = :a',
+      ExpressionAttributeValues: { ':a': 0 },
       ReturnValues: 'ALL_NEW',
     })
     .promise();

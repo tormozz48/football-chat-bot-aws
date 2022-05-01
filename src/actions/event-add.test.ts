@@ -2,7 +2,7 @@ import * as faker from 'faker';
 import { Wrapped } from 'lambda-wrapper';
 import * as path from 'path';
 import { lambdaWrapper } from 'serverless-jest-plugin';
-import { formatDate } from '../utils/date';
+import { formatDate, parseDate } from '../utils/date';
 import { ActionResults, Actions, ActionStatuses, IMessage, Languages } from '../types';
 import { eventAdd } from './event-add';
 
@@ -37,6 +37,45 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
     expect(response.body).toMatchObject({
       chatId,
       // eventDate: new Date(dateInMillis).ge.valueOf(),
+      active: 1,
+      members: [],
+    });
+  });
+
+  it('create event for another date', async () => {
+    const chatId = faker.datatype.number();
+    const dateInMillis1 = faker.date.future().getTime();
+    const date1 = formatDate(dateInMillis1);
+
+    const dateInMillis2 = faker.date.future().getTime();
+    const date2 = formatDate(dateInMillis2);
+
+    const response1 = await eventAddAction.run({
+      ...createPayloadBaseParams(),
+      chatId,
+      text: date1,
+      fullText: `/event_add ${date1}`,
+    });
+
+    expect(response1.status).toEqual(ActionStatuses.success);
+    expect(response1.body).toMatchObject({
+      chatId,
+      eventDate: parseDate(date1).toMillis(),
+      active: 1,
+      members: [],
+    });
+
+    const response2 = await eventAddAction.run({
+      ...createPayloadBaseParams(),
+      chatId,
+      text: date2,
+      fullText: `/event_add ${date2}`,
+    });
+
+    expect(response2.status).toEqual(ActionStatuses.success);
+    expect(response2.body).toMatchObject({
+      chatId,
+      eventDate: parseDate(date2).toMillis(),
       active: 1,
       members: [],
     });

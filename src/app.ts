@@ -3,15 +3,11 @@ import * as AWS from 'aws-sdk';
 import { compile } from 'handlebars';
 import { LambdaLog } from 'lambda-log';
 import { EOL } from 'os';
-import { eventAdd } from './actions/event-add';
-import { eventInfo } from './actions/event-info';
-import { eventRemove } from './actions/event-remove';
-import { memberAdd } from './actions/member-add';
-import { memberRemove } from './actions/member-remove';
 import { templates as eventAddTemplates } from './templates/event-add.template';
 import { templates as eventInfoTemplates } from './templates/event-info.template';
 import { templates as eventRemoveTemplates } from './templates/event-remove.template';
-import { templates as membeAddtemplates } from './templates/member-add.template';
+import { templates as memberAddTemplates } from './templates/member-add.template';
+import { templates as memberRemoveTemplates } from './templates/member-remove.template';
 import { templates as eventNotFoundTemplates } from './templates/shared/event-not-found.template';
 import { templates as failTemplates } from './templates/shared/fail.template';
 import { ActionResult, ActionResults, Actions, IMessage } from './types';
@@ -36,7 +32,8 @@ const templates = [
   ...eventInfoTemplates,
   ...eventRemoveTemplates,
   ...eventNotFoundTemplates,
-  ...membeAddtemplates,
+  ...memberAddTemplates,
+  ...memberRemoveTemplates,
   ...failTemplates,
 ];
 

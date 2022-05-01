@@ -115,4 +115,92 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
       expect(response.body).toEqual({});
     });
   });
+
+  it(`status: ${ActionStatuses.memberNotFound} (case #1)`, async () => {
+    const chatId = faker.datatype.number();
+
+    await createEvent(chatId);
+
+    const memberName = faker.datatype.string();
+    const payload = {
+      ...createPayloadBaseParams(),
+      chatId,
+      text: '',
+      memberName,
+    };
+
+    const firstInfoCallResponse = await eventInfoAction.run({
+      ...payload,
+      action: Actions[Actions.eventInfo],
+      fullText: `/event_info`,
+    });
+
+    expect(firstInfoCallResponse.body).toMatchObject({
+      members: [],
+    });
+
+    const memberRemoveResponse = await memberRemoveAction.run({
+      ...payload,
+      action: Actions[Actions.memberRemove],
+      fullText: `/remove`,
+    });
+
+    expect(memberRemoveResponse.status).toEqual(ActionStatuses.memberNotFound);
+    expect(memberRemoveResponse.body).toMatchObject({
+      name: memberName,
+    });
+  });
+
+  it(`status: ${ActionStatuses.memberNotFound} (case #2)`, async () => {
+    const chatId = faker.datatype.number();
+
+    await createEvent(chatId);
+
+    const memberName = faker.datatype.string();
+    const payload = {
+      ...createPayloadBaseParams(),
+      chatId,
+      text: '',
+      memberName,
+    };
+
+    await memberAddAction.run({
+      ...payload,
+      action: Actions[Actions.memberAdd],
+      fullText: `/add`,
+    });
+
+    const firstInfoCallResponse = await eventInfoAction.run({
+      ...payload,
+      action: Actions[Actions.eventInfo],
+      fullText: `/event_info`,
+    });
+
+    expect(firstInfoCallResponse.body).toMatchObject({
+      members: [{ name: memberName }],
+    });
+
+    const missedMember = faker.datatype.string();
+    const memberRemoveResponse = await memberRemoveAction.run({
+      ...payload,
+      action: Actions[Actions.memberRemove],
+      text: missedMember,
+      fullText: `/remove ${missedMember}`,
+    });
+
+    expect(memberRemoveResponse.status).toEqual(ActionStatuses.memberNotFound);
+    expect(memberRemoveResponse.body).toMatchObject({
+      name: missedMember,
+    });
+
+    const secondInfoCallResponse = await eventInfoAction.run({
+      ...payload,
+      action: Actions[Actions.eventInfo],
+      fullText: `/event_info`,
+    });
+
+    expect(secondInfoCallResponse.body).toMatchObject({
+      members: [{ name: memberName }],
+    });
+  });
 });
