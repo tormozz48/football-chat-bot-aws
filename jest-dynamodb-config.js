@@ -13,8 +13,8 @@ module.exports = {
       ProvisionedThroughput: { ReadCapacityUnits: 1, WriteCapacityUnits: 1 },
     },
   ],
-  installerConfig: {
-    installPath: './docker/dynamodb',
-  },
+  // installerConfig: {
+  //   installPath: './docker/dynamodb',
+  // },
   port: 8000,
 };
