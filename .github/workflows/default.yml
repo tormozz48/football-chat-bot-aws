@@ -44,8 +44,6 @@ jobs:
         with:
           port: 8000
           cors: '*'
-      # - name: Setup local DynamoDB
-      #   run: docker-compose up -d
       - name: Install dependencies
         run: npm ci
       - name: Build
