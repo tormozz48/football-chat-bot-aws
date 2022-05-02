@@ -4,6 +4,7 @@ export default {
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/'],
   coverageProvider: 'v8',
   globalSetup: './test/setup.ts',
+  preset: '@shelf/jest-dynamodb',
   resetMocks: false,
   restoreMocks: true,
   rootDir: './',
