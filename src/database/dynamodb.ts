@@ -1,14 +1,16 @@
 import * as AWS from 'aws-sdk';
 
-let options = {};
+export const offlineOptions = {
+  region: 'localhost',
+  endpoint: 'http://localhost:8000',
+  accessKeyId: 'DEFAULT_ACCESS_KEY',
+  secretAccessKey: 'DEFAULT_SECRET',
+  sslEnabled: false,
+};
 
+let options = {};
 if (process.env.IS_OFFLINE) {
-  options = {
-    region: 'localhost',
-    endpoint: 'http://localhost:8000',
-    accessKeyId: 'DEFAULT_ACCESS_KEY',
-    secretAccessKey: 'DEFAULT_SECRET',
-  };
+  options = offlineOptions;
 }
 
 export const dynamoDBDocumentClient = new AWS.DynamoDB.DocumentClient(options);
