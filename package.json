@@ -29,7 +29,7 @@
     "pretest": "serverless dynamodb migrate",
     "test": "jest --silent",
     "test:debug": "jest --runInBand",
-    "test:ci": "jest --coverage",
+    "test:ci": "jest --silent --coverage",
     "coverage": "jest --coverage",
     "db-start": "serverless dynamodb start --migrate",
     "db-gui": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin"
@@ -46,7 +46,6 @@
     "telegraf-aws": "^1.0.0"
   },
   "devDependencies": {
-    "@shelf/jest-dynamodb": "^2.2.3",
     "@types/aws-lambda": "^8.10.94",
     "@types/faker": "5.5.3",
     "@types/jest": "^27.4.1",
