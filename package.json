@@ -29,7 +29,7 @@
     "pretest": "serverless dynamodb migrate",
     "test": "jest --silent",
     "test:debug": "jest --runInBand",
-    "test:ci": "jest --silent --coverage",
+    "test:ci": "jest --silent --coverage --runInBand",
     "coverage": "jest --coverage",
     "db-start": "serverless dynamodb start --migrate",
     "db-gui": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin"
