@@ -39,24 +39,15 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          # telegramBotToken: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          # telegramBotWebhookUrl: ${{secrets.TELEGRAM_BOT_WEBHOOK_URL}}
-      # - name: Setup local DynamoDB
-      #   run: docker-compose up -d
-      - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v2.0.1
-        with:
-          dbPath: ./data
-          sharedDb: true
-          # delayTransientStatuses: # undefined by default
-          # optimizeDbBeforeStartup: # undefined by default
-          port: 8000
-          cors: '*'
+      - name: Setup local DynamoDB
+        run: docker-compose up -d
       - name: Install dependencies
         run: npm ci
       - name: Build
         run: npm run build --if-present
       - name: Prepare Tests
-        run: npm run pretest -- --param="telegramBotToken=${{ secrets.TELEGRAM_BOT_TOKEN }}" --param="telegramBotWebhookUrl=${{secrets.TELEGRAM_BOT_WEBHOOK_URL}}"
+        run: npm run pretest -- \
+          --param="telegramBotToken=${{ secrets.TELEGRAM_BOT_TOKEN }}" \
+          --param="telegramBotWebhookUrl=${{secrets.TELEGRAM_BOT_WEBHOOK_URL}}"
       - name: Run Unit-Tests
         run: npm run test:ci
