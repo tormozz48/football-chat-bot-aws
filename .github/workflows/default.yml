@@ -48,5 +48,7 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build --if-present
+      - name: Prepare Tests
+        run: npm run pretest -- --param="telegramBotToken=${{ secrets.TELEGRAM_BOT_TOKEN }}" --param="telegramBotWebhookUrl=${{secrets.TELEGRAM_BOT_WEBHOOK_URL}}"
       - name: Run Unit-Tests
         run: npm run test:ci
