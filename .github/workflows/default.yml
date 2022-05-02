@@ -39,8 +39,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: Setup local DynamoDB
-        run: docker-compose up -d
+      - name: Setup DynamoDB Local
+        uses: rrainn/dynamodb-action@v2.0.1
+        with:
+          port: 8000
+          cors: '*'
+      # - name: Setup local DynamoDB
+      #   run: docker-compose up -d
       - name: Install dependencies
         run: npm ci
       - name: Build
