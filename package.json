@@ -46,6 +46,7 @@
     "telegraf-aws": "^1.0.0"
   },
   "devDependencies": {
+    "@shelf/jest-dynamodb": "^2.2.3",
     "@types/aws-lambda": "^8.10.94",
     "@types/faker": "5.5.3",
     "@types/jest": "^27.4.1",
