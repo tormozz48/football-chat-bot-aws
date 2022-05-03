@@ -28,14 +28,14 @@
     "depcheck": "depcheck",
     "type-coverage": "type-coverage --strict --at-least 99",
     "lint": "npm run eslint && npm run depcheck && npm run type-coverage",
+    "db:migrate": "serverless dynamodb migrate",
     "dev": "serverless offline",
     "deploy": "serverless deploy",
-    "pretest": "serverless dynamodb migrate",
+    "pretest": "npm run db:migrate",
     "test": "jest --silent",
     "test:debug": "jest --runInBand",
     "test:ci": "jest --silent --coverage --runInBand",
     "coverage": "jest --coverage",
-    "db-start": "serverless dynamodb start --migrate",
     "db-gui": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin"
   },
   "pre-commit": [
