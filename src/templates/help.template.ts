@@ -8,6 +8,7 @@ export const templates = [
     bundle: {
       en: [
         '🤖 Hi! I am a robot who helps you to organize your event 🤖',
+        '',
         'Commands: ',
         '1️⃣ Apply to upcoming event: <strong>/add</strong>',
         '2️⃣ Invite member: <strong>/add username</strong>',
@@ -18,7 +19,8 @@ export const templates = [
       ],
       ru: [
         '🤖 Привет! Я помогу организовать твое событие 🤖',
-        'Commands: ',
+        '',
+        'Команды: ',
         '1️⃣ Принять участие: <strong>/add</strong>',
         '2️⃣ Пригласить другого: <strong>/add username</strong>',
         '3️⃣ Отменить свою заявку на участие: <strong>/remove</strong>',
