@@ -39,6 +39,8 @@ provider:
     EVENTS_TABLE: ${self:custom.tableName}
     TELEGRAM_BOT_TOKEN: ${param:telegramBotToken}
     TELEGRAM_BOT_WEBHOOK_URL: ${param:telegramBotWebhookUrl}
+    VK_TOKEN: ${param:vkToken}
+    VK_CONFIRMATION: ${param:vkConfirmation}
   iam:
     role:
       statements:
@@ -64,6 +66,12 @@ functions:
     events:
       - httpApi:
           path: /telegram
+          method: post
+  vk:
+    handler: src/handlers/vk.handler
+    events:
+      - httpApi:
+          path: /vk/callback
           method: post
   eventAdd:
     handler: src/actions/event-add.eventAdd

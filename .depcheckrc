@@ -4,6 +4,7 @@
     "@types/jest",
     "--unused-dev-ingores--",
     "ts-jest",
+    "ts-node",
     "--missing-ignores--",
     "aws-lambda",
     "lambda-wrapper"
