@@ -53,7 +53,7 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build --if-present
-      - name: Prepare Tests
-        run: npm run pretest -- --param="telegramBotToken=fake-value" --param="telegramBotWebhookUrl=fake-value" --param="vkToken=fake-value" --param="vkConfirmation=fake-value"
+      - name: Database Migration
+        run: npm run db:migrate -- --param="telegramBotToken=fake-value" --param="telegramBotWebhookUrl=fake-value" --param="vkToken=fake-value" --param="vkConfirmation=fake-value"
       - name: Run Unit-Tests
         run: npm run test:ci
