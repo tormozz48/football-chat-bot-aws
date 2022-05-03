@@ -1,8 +1,8 @@
 import { LambdaLog } from 'lambda-log';
 import { Telegraf, Context } from 'telegraf';
 import * as telegrafAws from 'telegraf-aws';
-import { processMessage } from './app';
-import { Actions, IMessage, Languages } from './types';
+import { processMessage } from '../app';
+import { Actions, IMessage, Languages } from '../types';
 import { Update } from 'telegraf/typings/core/types/typegram';
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN, { telegram: { webhookReply: true } });
@@ -15,6 +15,7 @@ logger.info('telegraf bot has been initialized', {
 });
 
 [
+  Actions.help,
   Actions.eventAdd,
   Actions.eventInfo,
   Actions.eventRemove,
@@ -31,12 +32,6 @@ logger.info('telegraf bot has been initialized', {
       return ctx.reply(error);
     }
   });
-});
-
-bot.command('help', (ctx: Context) => {
-  logger.info('help command received', ctx);
-
-  return ctx.reply('Try send a sticker!');
 });
 
 export const handler = telegrafAws(bot, { timeout: 1000 });
@@ -69,6 +64,7 @@ function detectLanguage(ctx: Context & Context<Update.MessageUpdate>): Languages
 }
 
 /**
+ * TODO: this was important for PostgreSQL. Verify DynamoDb capabilities
  * Telegram chat identifier may be greater or less then max 4 byte integer value
  * @param  {number} chatId
  * @return number

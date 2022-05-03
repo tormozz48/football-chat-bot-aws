@@ -60,7 +60,7 @@ provider:
 
 functions:
   telegram:
-    handler: src/telegram.handler
+    handler: src/handlers/telegram.handler
     events:
       - httpApi:
           path: /telegram

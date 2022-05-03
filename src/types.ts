@@ -6,6 +6,7 @@ export enum Languages {
 }
 
 export enum Actions {
+  help = 'help',
   eventAdd = 'event_add',
   eventRemove = 'event_remove',
   eventInfo = 'info',
@@ -29,6 +30,7 @@ export type Member = { name: string };
 export type ActionResult<T = ActionStatuses, U = {}> = { status: T; body: U };
 
 export type ActionResults = {
+  [Actions.help]: ActionResult<ActionStatuses.success>;
   [Actions.eventAdd]:
     | ActionResult<ActionStatuses.fail>
     | ActionResult<ActionStatuses.eventInvalidDate>

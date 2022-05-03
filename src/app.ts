@@ -10,7 +10,7 @@ import { templates as memberAddTemplates } from './templates/member-add.template
 import { templates as memberRemoveTemplates } from './templates/member-remove.template';
 import { templates as eventNotFoundTemplates } from './templates/shared/event-not-found.template';
 import { templates as failTemplates } from './templates/shared/fail.template';
-import { ActionResult, ActionResults, Actions, IMessage } from './types';
+import { ActionResult, ActionResults, Actions, ActionStatuses, IMessage } from './types';
 
 const logger = new LambdaLog({ tags: ['app'] });
 
@@ -20,6 +20,7 @@ const stage = process.env.STAGE;
 logger.info(`environment parameters`, { serviceName, stage });
 
 const ActionsMap: Record<Actions, Handler<IMessage, ActionResult>['name']> = {
+  [Actions.help]: 'help',
   [Actions.eventAdd]: 'eventAdd',
   [Actions.eventInfo]: 'eventInfo',
   [Actions.eventRemove]: 'eventRemove',
@@ -40,6 +41,10 @@ const templates = [
 export async function processMessage(message: IMessage): Promise<string> {
   logger.info('message received', message);
 
+  if (message.action === Actions.help) {
+    return applyTemplate(message, { status: ActionStatuses.success, body: {} });
+  }
+
   const { StatusCode, FunctionError, Payload } = await new AWS.Lambda()
     .invoke({
       FunctionName: `${serviceName}-${stage}-${ActionsMap[message.action]}`,
@@ -52,6 +57,8 @@ export async function processMessage(message: IMessage): Promise<string> {
       StatusCode,
       Payload,
     });
+
+    return applyTemplate(message, { status: ActionStatuses.fail, body: {} });
   }
 
   const response: ActionResults[keyof ActionResults] = JSON.parse(Payload.toString());
