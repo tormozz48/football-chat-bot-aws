@@ -10,6 +10,7 @@ import { templates as memberAddTemplates } from './templates/member-add.template
 import { templates as memberRemoveTemplates } from './templates/member-remove.template';
 import { templates as eventNotFoundTemplates } from './templates/shared/event-not-found.template';
 import { templates as failTemplates } from './templates/shared/fail.template';
+import { templates as helpTemplates } from './templates/help.template';
 import { ActionResult, ActionResults, Actions, ActionStatuses, IMessage } from './types';
 
 const logger = new LambdaLog({ tags: ['app'] });
@@ -36,6 +37,7 @@ const templates = [
   ...memberAddTemplates,
   ...memberRemoveTemplates,
   ...failTemplates,
+  ...helpTemplates,
 ];
 
 export async function processMessage(message: IMessage): Promise<string> {
