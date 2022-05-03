@@ -1,8 +1,7 @@
-import { Actions } from 'src/types';
-import { Template } from './types';
-import { ActionStatuses, ActionResults, ActionResult } from '../types';
 import { Event } from '../database/types';
+import { ActionResult, ActionResults, Actions, ActionStatuses } from '../types';
 import { formatDate } from '../utils/date';
+import { Template } from './types';
 
 export const templates = [
   <Template<Actions.eventInfo, ActionStatuses.success>>{

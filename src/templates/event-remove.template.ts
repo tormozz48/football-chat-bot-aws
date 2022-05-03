@@ -1,5 +1,5 @@
-import { ActionResult, ActionResults, Actions } from 'src/types';
-import { formatDate } from 'src/utils/date';
+import { ActionResult, ActionResults, Actions } from '../types';
+import { formatDate } from '../utils/date';
 import { ActionStatuses } from '../types';
 import { Template } from './types';
 import { Event } from '../database/types';

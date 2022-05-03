@@ -2,8 +2,8 @@ import * as faker from 'faker';
 import { Wrapped } from 'lambda-wrapper';
 import * as path from 'path';
 import { lambdaWrapper } from 'serverless-jest-plugin';
-import { formatDate, parseDate } from '../utils/date';
 import { ActionResults, Actions, ActionStatuses, IMessage, Languages } from '../types';
+import { formatDate, parseDate } from '../utils/date';
 import { eventAdd } from './event-add';
 
 describe(`${path.relative(process.cwd(), __filename)}`, () => {

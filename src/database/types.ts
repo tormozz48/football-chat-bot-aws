@@ -1,6 +1,6 @@
 export type ChatIdParam = { chatId: Event['chatId'] };
 
-export type EventParam = ChatIdParam & { eventDate: Event['eventDate'] };
+type EventParam = ChatIdParam & { eventDate: Event['eventDate'] };
 
 export type GetEventParam = EventParam;
 
@@ -12,7 +12,7 @@ export type DeactivateEventParam = EventParam;
 
 export type RemoveEventParam = EventParam;
 
-export interface EventMember {
+interface EventMember {
   readonly name: string;
 }
 

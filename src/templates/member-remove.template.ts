@@ -1,4 +1,4 @@
-import { ActionResult, ActionResults, Actions, ActionStatuses, Member } from 'src/types';
+import { ActionResult, ActionResults, Actions, ActionStatuses, Member } from '../types';
 import { Template } from './types';
 import { Event } from '../database/types';
 

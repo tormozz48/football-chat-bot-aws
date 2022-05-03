@@ -1,6 +1,6 @@
 import * as AWS from 'aws-sdk';
 
-export const offlineOptions = {
+const offlineOptions = {
   region: 'localhost',
   endpoint: 'http://localhost:8000',
   accessKeyId: 'DEFAULT_ACCESS_KEY',

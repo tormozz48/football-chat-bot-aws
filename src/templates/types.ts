@@ -1,5 +1,6 @@
 import { Languages, Actions, ActionStatuses, ActionResults } from '../types';
-export type LangBundle = Record<Languages, string[]>;
+
+type LangBundle = Record<Languages, string[]>;
 
 export interface Template<A extends Actions, S extends ActionStatuses> {
   readonly action: A;

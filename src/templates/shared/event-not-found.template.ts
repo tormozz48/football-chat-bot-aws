@@ -1,4 +1,4 @@
-import { Actions, ActionStatuses } from 'src/types';
+import { Actions, ActionStatuses } from '../../types';
 import { Template } from '../types';
 
 export const templates = [

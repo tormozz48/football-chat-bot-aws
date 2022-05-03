@@ -1,0 +1,11 @@
+{
+  "ignores": [
+    "--type-ignores--",
+    "@types/jest",
+    "--unused-dev-ingores--",
+    "ts-jest",
+    "--missing-ignores--",
+    "aws-lambda",
+    "lambda-wrapper"
+  ]
+}
