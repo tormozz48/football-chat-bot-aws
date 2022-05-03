@@ -22,11 +22,12 @@
     "VK"
   ],
   "scripts": {
+    "prepare": "husky install",
     "eslint": "eslint --max-warnings 0 'src/**/*.ts'",
     "eslint:fix": "eslint --fix 'src/**/*.ts'",
     "depcheck": "depcheck",
     "type-coverage": "type-coverage --strict --at-least 99",
-    "lint": "npm run eslint && npm run unused-exports && npm run type-coverage",
+    "lint": "npm run eslint && npm run depcheck && npm run type-coverage",
     "dev": "serverless offline",
     "deploy": "serverless deploy",
     "pretest": "serverless dynamodb migrate",
@@ -69,8 +70,8 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "faker": "5.5.3",
+    "husky": "^7.0.4",
     "jest": "^27.5.1",
-    "pre-commit": "^1.2.2",
     "prettier": "^2.6.2",
     "serverless": "^3.16.0",
     "serverless-dynamodb-local": "^0.2.40",
