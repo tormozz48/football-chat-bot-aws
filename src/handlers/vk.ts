@@ -13,16 +13,14 @@ const logger = new LambdaLog({ tags: ['vk'] });
 const token = process.env.VK_TOKEN;
 const confirmation = process.env.VK_CONFIRMATION;
 
-const bot = new VkBot({
-  token,
-  confirmation,
-  execute_timeout: 5000,
-  polling_timeout: 25,
-});
-
-logger.info('vk bot has been initialized');
-
 export const handler = async (event: APIGatewayEvent) => {
+  const bot = new VkBot({
+    token,
+    confirmation,
+  });
+
+  logger.info('vk bot has been initialized');
+
   const data = JSON.parse(event.body);
   if (data.type === 'confirmation') {
     return {
@@ -51,41 +49,6 @@ export const handler = async (event: APIGatewayEvent) => {
   }
 
   return makeResponse();
-
-  /*
-  [
-    Actions.help,
-    Actions.eventAdd,
-    Actions.eventInfo,
-    Actions.eventRemove,
-    Actions.memberAdd,
-    Actions.memberRemove,
-  ].forEach((command) => {
-    bot.command(`/${command}`, async (ctx: VkBotContext) => {
-      try {
-        logger.info('Receive context', ctx);
-        const [from] = await bot.execute('users.get', {
-          user_ids: ctx.message.from_id,
-        });
-        const message = composeMessage(command, ctx, from);
-        const response = await processMessage(message);
-        ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
-      } catch (error) {
-        logger.error(error);
-        ctx.reply(error.message);
-      }
-    });
-  });
-
-  const app = express().use(bodyParser.json()).use(bot.webhookCallback);
-
-  const h = serverless(app, { provider: 'aws' });
-  const result = await h(event, context);
-  logger.info('result', result);
-  return result;
-  */
-
-  // export const handler = serverless(app, {});
 };
 
 // private
