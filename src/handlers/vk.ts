@@ -21,10 +21,15 @@ const bot = new VkBot({
 logger.info('vk bot has been initialized');
 
 bot.command('/help', async (ctx: VkBotContext) => {
+  console.log(ctx);
   ctx.reply('help');
 });
 
-const app = express().use(bodyParser.json()).use(bot.webhookCallback);
+const app = express()
+  .use(bodyParser.json())
+  .post('/vk/callback', (req, res) => {
+    bot.webhookCallback(req, res);
+  });
 const _handler = serverless(app);
 
 export const handler = async (event: APIGatewayEvent, context: APIGatewayEventRequestContext) => {
