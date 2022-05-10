@@ -1,6 +1,9 @@
-import { APIGatewayEvent } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayEventRequestContext } from 'aws-lambda';
 import { LambdaLog } from 'lambda-log';
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
 import VkBot from 'node-vk-bot-api';
+import * as serverless from 'serverless-http';
 import * as Context from 'node-vk-bot-api/lib/context';
 import { processMessage } from '../app';
 import { Actions, IMessage, Languages } from '../types';
@@ -10,6 +13,26 @@ const logger = new LambdaLog({ tags: ['vk'] });
 const token = process.env.VK_TOKEN;
 const confirmation = process.env.VK_CONFIRMATION;
 
+const bot = new VkBot({
+  token,
+  confirmation,
+});
+
+logger.info('vk bot has been initialized');
+
+bot.command('/help', async (ctx: VkBotContext) => {
+  ctx.reply('help');
+});
+
+const app = express().use(bodyParser.json()).use(bot.webhookCallback);
+const _handler = serverless(app);
+
+export const handler = async (event: APIGatewayEvent, context: APIGatewayEventRequestContext) => {
+  const result = await _handler(event, context);
+  return result;
+};
+
+/*
 export const handler = async (event: APIGatewayEvent) => {
   const bot = new VkBot({
     token,
@@ -47,6 +70,7 @@ export const handler = async (event: APIGatewayEvent) => {
     return makeResponse();
   }
 };
+*/
 
 // private
 
