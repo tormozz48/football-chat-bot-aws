@@ -1,9 +1,6 @@
-import { APIGatewayEvent, APIGatewayEventRequestContext } from 'aws-lambda';
+import { APIGatewayEvent } from 'aws-lambda';
 import { LambdaLog } from 'lambda-log';
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
 import VkBot from 'node-vk-bot-api';
-import * as serverless from 'serverless-http';
 import * as Context from 'node-vk-bot-api/lib/context';
 import { processMessage } from '../app';
 import { Actions, IMessage, Languages } from '../types';

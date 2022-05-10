@@ -23,7 +23,7 @@ const success: Template<Actions.memberRemove, ActionStatuses.success> = {
     return {
       name: body.name,
       eventDate: body.eventDate,
-      members: body.members.map(({ name }, index) => ({ index, name })),
+      members: body.members.map(({ name }, index) => ({ index: index + 1, name })),
       total: body.members.length,
     };
   },

@@ -15,7 +15,7 @@ export const templates = [
 
       return {
         eventDate: formatDate(body.eventDate),
-        members: body.members.map(({ name }, index) => ({ index, name })),
+        members: body.members.map(({ name }, index) => ({ index: index + 1, name })),
         total: body.members.length,
       };
     },
