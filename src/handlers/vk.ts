@@ -11,6 +11,8 @@ const logger = new LambdaLog({ tags: ['vk'] });
 const token = process.env.VK_TOKEN;
 const confirmation = process.env.VK_CONFIRMATION;
 
+const sleep = (time: number) => new Promise((resolve) => setTimeout(resolve, time));
+
 const bot = new VkBot({
   token,
   confirmation,
@@ -40,6 +42,7 @@ logger.info('vk bot has been initialized');
       const response = await processMessage(message);
       console.log('response', response);
       ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
+      await sleep(1000);
     } catch (error) {
       logger.error(error);
       ctx.reply(error.message);
