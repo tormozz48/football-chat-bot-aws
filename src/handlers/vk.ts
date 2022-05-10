@@ -13,32 +13,6 @@ const logger = new LambdaLog({ tags: ['vk'] });
 const token = process.env.VK_TOKEN;
 const confirmation = process.env.VK_CONFIRMATION;
 
-const bot = new VkBot({
-  token,
-  confirmation,
-});
-
-logger.info('vk bot has been initialized');
-
-bot.command('/help', async (ctx: VkBotContext) => {
-  console.log(ctx);
-  const result = await ctx.bot.sendMessage(ctx.message.peer_id, 'hello');
-  console.log(result);
-});
-
-const app = express()
-  .use(bodyParser.json())
-  .post('/vk/callback', (req, res) => {
-    bot.webhookCallback(req, res, () => ({}));
-  });
-const _handler = serverless(app);
-
-export const handler = async (event: APIGatewayEvent, context: APIGatewayEventRequestContext) => {
-  const result = await _handler(event, context);
-  return result;
-};
-
-/*
 export const handler = async (event: APIGatewayEvent) => {
   const bot = new VkBot({
     token,
@@ -68,15 +42,14 @@ export const handler = async (event: APIGatewayEvent) => {
     });
     const message = composeMessage(command, ctx, from);
     const response = await processMessage(message);
-    ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
+    await ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
   } catch (error) {
     logger.error(error.message);
-    ctx.reply(error.message);
+    await ctx.reply(error.message);
   } finally {
     return makeResponse();
   }
 };
-*/
 
 // private
 
