@@ -10,12 +10,12 @@ const eventInvalidDate: Template<Actions.eventAdd, ActionStatuses.eventInvalidDa
     en: [
       '<strong>Invalid date format</strong>❗️',
       '',
-      '🕰 Allowed date example: <i>2022-04-22 09:30</i>',
+      '🕰 Allowed date example: <i>22-04-2022 09:30</i>',
     ],
     ru: [
       '❗️<strong>Неправильный формат даты</strong>❗️',
       '',
-      '🕰 Допустимый формат: <i>2022-04-22 09:30</i>',
+      '🕰 Допустимый формат: <i>22-04-2022 09:30</i>',
     ],
   },
 };

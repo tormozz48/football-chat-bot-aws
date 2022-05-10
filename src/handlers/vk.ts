@@ -1,12 +1,9 @@
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
+import { APIGatewayEvent } from 'aws-lambda';
 import { LambdaLog } from 'lambda-log';
 import VkBot from 'node-vk-bot-api';
 import * as Context from 'node-vk-bot-api/lib/context';
-import * as serverless from 'serverless-http';
 import { processMessage } from '../app';
 import { Actions, IMessage, Languages } from '../types';
-import { APIGatewayEvent } from 'aws-lambda';
 
 const logger = new LambdaLog({ tags: ['vk'] });
 
@@ -46,9 +43,9 @@ export const handler = async (event: APIGatewayEvent) => {
   } catch (error) {
     logger.error(error.message);
     ctx.reply(error.message);
+  } finally {
+    return makeResponse();
   }
-
-  return makeResponse();
 };
 
 // private
