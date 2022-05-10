@@ -22,37 +22,39 @@ const bot = new VkBot({
 
 logger.info('vk bot has been initialized');
 
-[
-  Actions.help,
-  Actions.eventAdd,
-  Actions.eventInfo,
-  Actions.eventRemove,
-  Actions.memberAdd,
-  Actions.memberRemove,
-].forEach((command) => {
-  bot.command(`/${command}`, async (ctx: VkBotContext) => {
-    try {
-      logger.info('Receive context', ctx);
-      // const [from] = await bot.execute('users.get', {
-      //   user_ids: ctx.message.from_id,
-      // });
-      // const message = composeMessage(command, ctx, from);
-      const message = composeMessage(command, ctx);
-      console.log('message', message);
-      const response = await processMessage(message);
-      await sleep(1000);
-      console.log('response', response);
-      ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
-    } catch (error) {
-      logger.error(error);
-      ctx.reply(error.message);
-    } finally {
-      await sleep(1000);
-    }
-  });
+bot.command('/help', (ctx: VkBotContext) => {
+  ctx.reply('Hello');
 });
 
-bot.start();
+// [
+//   Actions.help,
+//   Actions.eventAdd,
+//   Actions.eventInfo,
+//   Actions.eventRemove,
+//   Actions.memberAdd,
+//   Actions.memberRemove,
+// ].forEach((command) => {
+//   bot.command(`/${command}`, async (ctx: VkBotContext) => {
+//     try {
+//       logger.info('Receive context', ctx);
+//       // const [from] = await bot.execute('users.get', {
+//       //   user_ids: ctx.message.from_id,
+//       // });
+//       // const message = composeMessage(command, ctx, from);
+//       const message = composeMessage(command, ctx);
+//       console.log('message', message);
+//       const response = await processMessage(message);
+//       await sleep(1000);
+//       console.log('response', response);
+//       ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
+//     } catch (error) {
+//       logger.error(error);
+//       ctx.reply(error.message);
+//     } finally {
+//       await sleep(1000);
+//     }
+//   });
+// });
 
 const app = express();
 app.use(bodyParser.json());
