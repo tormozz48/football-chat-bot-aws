@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { LambdaLog } from 'lambda-log';
 import VkBot from 'node-vk-bot-api';
+import * as Context from 'node-vk-bot-api/lib/context';
 import * as serverless from 'serverless-http';
 import { processMessage } from '../app';
 import { Actions, IMessage, Languages } from '../types';
@@ -21,19 +22,37 @@ const bot = new VkBot({
 
 logger.info('vk bot has been initialized');
 
-export const handler = async (event: APIGatewayEvent, context) => {
-  // const data = JSON.parse(event.body);
-  // if (data.type === 'confirmation') {
-  //   return {
-  //     statusCode: 200,
-  //   }
-  // }
-  // return {
-  //   statusCode: 200,
-  //   isBase64Encoded: false,
-  //   body: 'ok',
-  // };
+export const handler = async (event: APIGatewayEvent) => {
+  const data = JSON.parse(event.body);
+  if (data.type === 'confirmation') {
+    return {
+      statusCode: 200,
+      body: confirmation,
+    };
+  }
 
+  const ctx: VkBotContext = new Context(data, bot);
+  try {
+    logger.info('Receive context', ctx);
+    const command = resolveCommand(ctx.message.text);
+    if (!command) {
+      return makeResponse();
+    }
+
+    const [from] = await bot.execute('users.get', {
+      user_ids: ctx.message.from_id,
+    });
+    const message = composeMessage(command, ctx, from);
+    const response = await processMessage(message);
+    ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
+  } catch (error) {
+    logger.error(error.message);
+    ctx.reply(error.message);
+  }
+
+  return makeResponse();
+
+  /*
   [
     Actions.help,
     Actions.eventAdd,
@@ -64,11 +83,25 @@ export const handler = async (event: APIGatewayEvent, context) => {
   const result = await h(event, context);
   logger.info('result', result);
   return result;
+  */
+
+  // export const handler = serverless(app, {});
 };
 
-// export const handler = serverless(app, {});
-
 // private
+
+function resolveCommand(text: string): Actions | null {
+  const command = [
+    Actions.help,
+    Actions.eventAdd,
+    Actions.eventInfo,
+    Actions.eventRemove,
+    Actions.memberAdd,
+    Actions.memberRemove,
+  ].find((action) => text.trim().startsWith(`/${action}`));
+
+  return command ?? null;
+}
 
 function composeMessage(
   action: Actions,
@@ -94,4 +127,12 @@ function getChatId(ctx: VkBotContext): number {
   const { message, groupId } = ctx;
   const peerId: number = +`${message.peer_id}`.replace(/[0-9]0+/, '');
   return peerId + groupId;
+}
+
+function makeResponse() {
+  return {
+    statusCode: 200,
+    isBase64Encoded: false,
+    body: 'ok',
+  };
 }
