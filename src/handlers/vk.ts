@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as bodyParser from 'body-parser';
 import { LambdaLog } from 'lambda-log';
 import VkBot from 'node-vk-bot-api';
 import * as serverless from 'serverless-http';
@@ -8,6 +9,7 @@ import { Actions, IMessage, Languages } from '../types';
 const logger = new LambdaLog({ tags: ['vk'] });
 
 const app = express();
+app.use(bodyParser.json());
 
 const token = process.env.VK_TOKEN;
 const confirmation = process.env.VK_CONFIRMATION;
