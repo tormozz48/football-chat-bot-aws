@@ -37,7 +37,8 @@ logger.info('vk bot has been initialized');
       // const [from] = await bot.execute('users.get', {
       //   user_ids: ctx.message.from_id,
       // });
-      const message = composeMessage(command, ctx, from);
+      // const message = composeMessage(command, ctx, from);
+      const message = composeMessage(command, ctx);
       const response = await processMessage(message);
       return ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
     } catch (error) {
