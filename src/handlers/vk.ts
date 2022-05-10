@@ -49,16 +49,11 @@ bot.command('/help', (ctx: VkBotContext) => {
   });
 });
 
-// const app = express();
+const app = express();
 // app.use(bodyParser.json());
-// app.post('/vk/callback', bot.webhookCallback);
+app.post('/vk/callback', bot.webhookCallback);
 
-// export const handler = serverless(app);
-
-export const handler = async (event: Aws.Event, context) => {
-  console.log(event);
-  return 'Hello';
-};
+export const handler = serverless(app);
 
 // private
 
