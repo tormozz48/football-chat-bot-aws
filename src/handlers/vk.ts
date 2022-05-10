@@ -40,12 +40,14 @@ logger.info('vk bot has been initialized');
       const message = composeMessage(command, ctx);
       console.log('message', message);
       const response = await processMessage(message);
+      await sleep(1000);
       console.log('response', response);
       ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
-      await sleep(1000);
     } catch (error) {
       logger.error(error);
       ctx.reply(error.message);
+    } finally {
+      await sleep(1000);
     }
   });
 });
