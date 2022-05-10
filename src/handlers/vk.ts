@@ -22,7 +22,7 @@ logger.info('vk bot has been initialized');
 
 bot.command('/help', async (ctx: VkBotContext) => {
   console.log(ctx);
-  ctx.reply('help');
+  await ctx.reply('help');
 });
 
 const app = express()
