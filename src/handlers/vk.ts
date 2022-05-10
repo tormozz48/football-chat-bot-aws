@@ -20,38 +20,38 @@ const bot = new VkBot({
 
 logger.info('vk bot has been initialized');
 
-[
-  Actions.help,
-  Actions.eventAdd,
-  Actions.eventInfo,
-  Actions.eventRemove,
-  Actions.memberAdd,
-  Actions.memberRemove,
-].forEach((command) => {
-  bot.command(`/${command}`, async (ctx: VkBotContext) => {
-    try {
-      logger.info('Receive context', ctx);
-      const [from] = await bot.execute('users.get', {
-        user_ids: ctx.message.from_id,
-      });
-      const message = composeMessage(command, ctx, from);
-      const response = await processMessage(message);
-      ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
-    } catch (error) {
-      logger.error(error);
-      ctx.reply(error.message);
-    }
-  });
-});
-
-const app = express();
-app.use(bodyParser.json());
-app.post('/vk/callback', bot.webhookCallback);
-
-const h = serverless(app, {});
-
 export const handler = async (event, context) => {
+  [
+    Actions.help,
+    Actions.eventAdd,
+    Actions.eventInfo,
+    Actions.eventRemove,
+    Actions.memberAdd,
+    Actions.memberRemove,
+  ].forEach((command) => {
+    bot.command(`/${command}`, async (ctx: VkBotContext) => {
+      try {
+        logger.info('Receive context', ctx);
+        const [from] = await bot.execute('users.get', {
+          user_ids: ctx.message.from_id,
+        });
+        const message = composeMessage(command, ctx, from);
+        const response = await processMessage(message);
+        ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
+      } catch (error) {
+        logger.error(error);
+        ctx.reply(error.message);
+      }
+    });
+  });
+
+  const app = express();
+  app.use(bodyParser.json());
+  app.post('/vk/callback', bot.webhookCallback);
+
+  const h = serverless(app, {});
   const result = await h(event, context);
+  console.log(result);
   return result;
 };
 
