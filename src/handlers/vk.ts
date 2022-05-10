@@ -11,8 +11,6 @@ const logger = new LambdaLog({ tags: ['vk'] });
 const token = process.env.VK_TOKEN;
 const confirmation = process.env.VK_CONFIRMATION;
 
-const sleep = (time: number) => new Promise((resolve) => setTimeout(resolve, time));
-
 const bot = new VkBot({
   token,
   confirmation,
@@ -26,39 +24,33 @@ bot.command('/help', (ctx: VkBotContext) => {
   ctx.reply('Hello');
 });
 
-// [
-//   Actions.help,
-//   Actions.eventAdd,
-//   Actions.eventInfo,
-//   Actions.eventRemove,
-//   Actions.memberAdd,
-//   Actions.memberRemove,
-// ].forEach((command) => {
-//   bot.command(`/${command}`, async (ctx: VkBotContext) => {
-//     try {
-//       logger.info('Receive context', ctx);
-//       // const [from] = await bot.execute('users.get', {
-//       //   user_ids: ctx.message.from_id,
-//       // });
-//       // const message = composeMessage(command, ctx, from);
-//       const message = composeMessage(command, ctx);
-//       console.log('message', message);
-//       const response = await processMessage(message);
-//       await sleep(1000);
-//       console.log('response', response);
-//       ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
-//     } catch (error) {
-//       logger.error(error);
-//       ctx.reply(error.message);
-//     } finally {
-//       await sleep(1000);
-//     }
-//   });
-// });
+[
+  Actions.help,
+  Actions.eventAdd,
+  Actions.eventInfo,
+  Actions.eventRemove,
+  Actions.memberAdd,
+  Actions.memberRemove,
+].forEach((command) => {
+  bot.command(`/${command}`, async (ctx: VkBotContext) => {
+    try {
+      logger.info('Receive context', ctx);
+      const [from] = await bot.execute('users.get', {
+        user_ids: ctx.message.from_id,
+      });
+      const message = composeMessage(command, ctx, from);
+      const response = await processMessage(message);
+      ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
+    } catch (error) {
+      logger.error(error);
+      ctx.reply(error.message);
+    }
+  });
+});
 
 const app = express();
 app.use(bodyParser.json());
-app.post('/vk/callback', bot.webhookCallback);
+app.use(bot.webhookCallback);
 
 export const handler = serverless(app);
 
@@ -67,11 +59,11 @@ export const handler = serverless(app);
 function composeMessage(
   action: Actions,
   ctx: VkBotContext,
-  from?: { first_name: string; last_name: string },
+  from: { first_name: string; last_name: string },
 ): IMessage {
   const { message } = ctx;
-  const firstName: string = from?.first_name || '';
-  const lastName: string = from?.last_name || '';
+  const firstName: string = from.first_name || '';
+  const lastName: string = from.last_name || '';
   const memberName = `${firstName} ${lastName}`.trim();
 
   return {
