@@ -50,7 +50,7 @@ bot.command('/help', (ctx: VkBotContext) => {
 
 const app = express();
 app.use(bodyParser.json());
-app.use(bot.webhookCallback);
+app.post('/vk/callback', bot.webhookCallback);
 
 export const handler = serverless(app);
 
