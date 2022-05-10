@@ -52,6 +52,8 @@ logger.info('vk bot has been initialized');
   });
 });
 
+bot.start();
+
 const app = express();
 app.use(bodyParser.json());
 app.post('/vk/callback', bot.webhookCallback);
