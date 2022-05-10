@@ -22,7 +22,8 @@ logger.info('vk bot has been initialized');
 
 bot.command('/help', async (ctx: VkBotContext) => {
   console.log(ctx);
-  await ctx.reply('help');
+  const result = await ctx.bot.sendMessage(ctx.message.peer_id, 'hello');
+  console.log(result);
 });
 
 const app = express()
