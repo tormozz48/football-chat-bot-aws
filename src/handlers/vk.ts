@@ -45,13 +45,13 @@ export const handler = async (event, context) => {
     });
   });
 
-  const app = express();
-  app.use(bodyParser.json());
-  app.post('/vk/callback', bot.webhookCallback);
+  // const app = express();
+  // app.use(bodyParser.json());
+  // app.post('/vk/callback', bot.webhookCallback);
 
-  const h = serverless(app, {});
+  const h = serverless(bot.webhookCallback, {});
   const result = await h(event, context);
-  console.log(result);
+  logger.info('result', result);
   return result;
 };
 
