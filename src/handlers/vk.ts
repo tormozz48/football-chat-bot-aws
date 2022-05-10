@@ -42,11 +42,9 @@ logger.info('vk bot has been initialized');
   });
 });
 
-// app.post('/vk/callback', (req, res, next) => {
-//   return bot.webhookCallback(req, res, next);
-// });
-
-app.post('/vk/callback', bot.webhookCallback.bind(bot));
+app.post('/vk/callback', async (req, res, next) => {
+  return bot.webhookCallback(req, res, next as () => {});
+});
 
 export const handler = serverless(app);
 
