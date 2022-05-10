@@ -8,9 +8,6 @@ import { Actions, IMessage, Languages } from '../types';
 
 const logger = new LambdaLog({ tags: ['vk'] });
 
-const app = express();
-app.use(bodyParser.json());
-
 const token = process.env.VK_TOKEN;
 const confirmation = process.env.VK_CONFIRMATION;
 
@@ -39,7 +36,9 @@ logger.info('vk bot has been initialized');
       // });
       // const message = composeMessage(command, ctx, from);
       const message = composeMessage(command, ctx);
+      console.log('message', message);
       const response = await processMessage(message);
+      console.log('response', response);
       return ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
     } catch (error) {
       logger.error(error);
@@ -48,9 +47,9 @@ logger.info('vk bot has been initialized');
   });
 });
 
-app.post('/vk/callback', async (req, res, next) => {
-  return bot.webhookCallback(req, res, next as () => {});
-});
+const app = express();
+app.use(bodyParser.json());
+app.post('/vk/callback', bot.webhookCallback);
 
 export const handler = serverless(app);
 
