@@ -28,6 +28,7 @@ logger.info('vk bot has been initialized');
 ].forEach((command) => {
   bot.command(`/${command}`, async (ctx: VkBotContext) => {
     try {
+      logger.info('Receive context', ctx);
       const [from] = await bot.execute('users.get', {
         user_ids: ctx.message.from_id,
       });
