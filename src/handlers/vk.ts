@@ -45,7 +45,11 @@ export const handler = async (event, context) => {
     });
   });
 
-  const app = express().use(bodyParser.json()).use(bot.webhookCallback);
+  const app = express()
+    .use(bodyParser.json())
+    .use(async (req, res, next) => {
+      await bot.webhookCallback(req, res, () => undefined);
+    });
 
   const h = serverless(app, { provider: 'aws' });
   const result = await h(event, context);
