@@ -5,6 +5,7 @@ import VkBot from 'node-vk-bot-api';
 import * as serverless from 'serverless-http';
 import { processMessage } from '../app';
 import { Actions, IMessage, Languages } from '../types';
+import Aws = require('serverless/plugins/aws/provider/awsProvider');
 
 const logger = new LambdaLog({ tags: ['vk'] });
 
@@ -48,11 +49,16 @@ bot.command('/help', (ctx: VkBotContext) => {
   });
 });
 
-const app = express();
-app.use(bodyParser.json());
-app.post('/vk/callback', bot.webhookCallback);
+// const app = express();
+// app.use(bodyParser.json());
+// app.post('/vk/callback', bot.webhookCallback);
 
-export const handler = serverless(app);
+// export const handler = serverless(app);
+
+export const handler = async (event: Aws.Event, context) => {
+  console.log(event);
+  return 'Hello';
+};
 
 // private
 
