@@ -45,11 +45,9 @@ export const handler = async (event, context) => {
     });
   });
 
-  // const app = express();
-  // app.use(bodyParser.json());
-  // app.post('/vk/callback', bot.webhookCallback);
+  const app = express().use(bodyParser.json()).use(bot.webhookCallback);
 
-  const h = serverless(bot.webhookCallback, {});
+  const h = serverless(app, { provider: 'aws' });
   const result = await h(event, context);
   logger.info('result', result);
   return result;
