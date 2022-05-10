@@ -34,9 +34,9 @@ logger.info('vk bot has been initialized');
   bot.command(`/${command}`, async (ctx: VkBotContext) => {
     try {
       logger.info('Receive context', ctx);
-      const [from] = await bot.execute('users.get', {
-        user_ids: ctx.message.from_id,
-      });
+      // const [from] = await bot.execute('users.get', {
+      //   user_ids: ctx.message.from_id,
+      // });
       const message = composeMessage(command, ctx, from);
       const response = await processMessage(message);
       return ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
@@ -58,11 +58,11 @@ export const handler = serverless(app);
 function composeMessage(
   action: Actions,
   ctx: VkBotContext,
-  from: { first_name: string; last_name: string },
+  from?: { first_name: string; last_name: string },
 ): IMessage {
   const { message } = ctx;
-  const firstName: string = from.first_name || '';
-  const lastName: string = from.last_name || '';
+  const firstName: string = from?.first_name || '';
+  const lastName: string = from?.last_name || '';
   const memberName = `${firstName} ${lastName}`.trim();
 
   return {
