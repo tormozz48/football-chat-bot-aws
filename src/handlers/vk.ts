@@ -5,6 +5,7 @@ import VkBot from 'node-vk-bot-api';
 import * as serverless from 'serverless-http';
 import { processMessage } from '../app';
 import { Actions, IMessage, Languages } from '../types';
+import { APIGatewayEvent } from 'aws-lambda';
 
 const logger = new LambdaLog({ tags: ['vk'] });
 
@@ -20,7 +21,19 @@ const bot = new VkBot({
 
 logger.info('vk bot has been initialized');
 
-export const handler = async (event, context) => {
+export const handler = async (event: APIGatewayEvent, context) => {
+  // const data = JSON.parse(event.body);
+  // if (data.type === 'confirmation') {
+  //   return {
+  //     statusCode: 200,
+  //   }
+  // }
+  // return {
+  //   statusCode: 200,
+  //   isBase64Encoded: false,
+  //   body: 'ok',
+  // };
+
   [
     Actions.help,
     Actions.eventAdd,
@@ -45,11 +58,7 @@ export const handler = async (event, context) => {
     });
   });
 
-  const app = express()
-    .use(bodyParser.json())
-    .use(async (req, res, next) => {
-      await bot.webhookCallback(req, res, () => undefined);
-    });
+  const app = express().use(bodyParser.json()).use(bot.webhookCallback);
 
   const h = serverless(app, { provider: 'aws' });
   const result = await h(event, context);
