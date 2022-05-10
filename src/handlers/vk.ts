@@ -21,10 +21,6 @@ const bot = new VkBot({
 
 logger.info('vk bot has been initialized');
 
-bot.command('/help', (ctx: VkBotContext) => {
-  ctx.reply('Hello');
-});
-
 [
   Actions.help,
   Actions.eventAdd,
@@ -49,11 +45,25 @@ bot.command('/help', (ctx: VkBotContext) => {
   });
 });
 
-const app = express();
+// const app = express();
 // app.use(bodyParser.json());
-app.post('/vk/callback', bot.webhookCallback);
+// app.post('/vk/callback', bot.webhookCallback);
 
-export const handler = serverless(app);
+// export const handler = serverless(app, {});
+
+export const handler = async (event, context) => {
+  const body = JSON.parse(event.body);
+  logger.info('body', body);
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+    },
+    body: 'Hello',
+    isBase64Encoded: false,
+  };
+};
 
 // private
 
