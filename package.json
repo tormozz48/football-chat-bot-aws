@@ -26,7 +26,7 @@
     "eslint": "eslint --max-warnings 0 'src/**/*.ts'",
     "eslint:fix": "eslint --fix 'src/**/*.ts'",
     "depcheck": "depcheck",
-    "type-coverage": "type-coverage --strict --at-least 99",
+    "type-coverage": "type-coverage --strict --at-least 95",
     "lint": "npm run eslint && npm run depcheck && npm run type-coverage",
     "db:migrate": "serverless dynamodb migrate",
     "dev": "serverless offline",

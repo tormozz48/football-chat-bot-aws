@@ -14,7 +14,12 @@ app.use(bodyParser.json());
 const token = process.env.VK_TOKEN;
 const confirmation = process.env.VK_CONFIRMATION;
 
-const bot = new VkBot({ token, confirmation });
+const bot = new VkBot({
+  token,
+  confirmation,
+  execute_timeout: 5000,
+  polling_timeout: 25,
+});
 
 logger.info('vk bot has been initialized');
 
@@ -37,7 +42,7 @@ logger.info('vk bot has been initialized');
       return ctx.reply(response.replace(/<\/?(strong|i)>/gm, ''));
     } catch (error) {
       logger.error(error);
-      return ctx.reply(error);
+      return ctx.reply(error.message);
     }
   });
 });
