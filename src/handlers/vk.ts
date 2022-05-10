@@ -69,7 +69,7 @@ function composeMessage(
   return {
     chatId: getChatId(ctx),
     lang: Languages.ru, //TODO check for lang detection
-    text: (message.text ?? '').replace(`/${this.command}`, '').trim(),
+    text: (message.text ?? '').replace(`/${action}`, '').trim(),
     fullText: message.text,
     action,
     memberName,
