@@ -1,6 +1,11 @@
 import { DateTime } from 'luxon';
 
-const dateFormat = 'dd-MM-yyyy HH:mm';
+export const dateFormats = [
+  'dd-MM-yyyy HH:mm',
+  'yyyy-MM-dd HH:mm',
+  'dd/MM/yyyy HH:mm',
+  'yyyy/MM/dd HH:mm',
+];
 
 /**
  * Parse given date string
@@ -8,8 +13,11 @@ const dateFormat = 'dd-MM-yyyy HH:mm';
  * @param  {string} dateStr
  * @return DateTime
  */
-export function parseDate(dateStr: string): DateTime {
-  return DateTime.fromFormat(dateStr, dateFormat).toUTC();
+export function parseDate(dateStr: string, index: number = 0): DateTime {
+  const parsedDate = DateTime.fromFormat(dateStr, dateFormats[index]).toUTC();
+  return !parsedDate.isValid && index < dateFormats.length - 1
+    ? parseDate(dateStr, ++index)
+    : parsedDate;
 }
 
 /**
@@ -28,7 +36,7 @@ export function isDateInPast(date: DateTime): boolean {
  * @param  {(DateTime | number)} date
  * @return string
  */
-export function formatDate(date: DateTime | number): string {
+export function formatDate(date: DateTime | number, format = dateFormats[0]): string {
   date = date instanceof DateTime ? date : DateTime.fromMillis(date);
-  return date.toFormat(dateFormat);
+  return date.toFormat(format);
 }

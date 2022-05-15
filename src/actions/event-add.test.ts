@@ -3,7 +3,7 @@ import { Wrapped } from 'lambda-wrapper';
 import * as path from 'path';
 import { lambdaWrapper } from 'serverless-jest-plugin';
 import { ActionResults, Actions, ActionStatuses, IMessage, Languages } from '../types';
-import { formatDate, parseDate } from '../utils/date';
+import { dateFormats, formatDate, parseDate } from '../utils/date';
 import { eventAdd } from './event-add';
 
 describe(`${path.relative(process.cwd(), __filename)}`, () => {
@@ -39,6 +39,28 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
       // eventDate: new Date(dateInMillis).ge.valueOf(),
       active: 1,
       members: [],
+    });
+  });
+
+  dateFormats.forEach((format) => {
+    it(`should support "${format}" date format`, async () => {
+      const chatId = faker.datatype.number();
+      const dateInMillis = faker.date.future().getTime();
+      const date = formatDate(dateInMillis, format);
+
+      const response = await eventAddAction.run({
+        ...createPayloadBaseParams(),
+        chatId,
+        text: date,
+        fullText: `/event_add ${date}`,
+      });
+
+      expect(response.status).toEqual(ActionStatuses.success);
+      expect(response.body).toMatchObject({
+        chatId,
+        active: 1,
+        members: [],
+      });
     });
   });
 
