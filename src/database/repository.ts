@@ -1,3 +1,4 @@
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { dynamoDBDocumentClient } from './dynamodb';
 import { UpdateEventMembersParam } from './types';
 import {
@@ -42,7 +43,7 @@ export async function getActiveEvent<T = Event>({ chatId }: ChatIdParam): Promis
       ...eventsTableName,
       ...getActiveEventQuery(chatId),
       ScanIndexForward: false,
-      Limit: 1,
+      Limit: 20, // Allow to create events for date before than last created
     })
     .promise();
 
@@ -143,7 +144,7 @@ async function deativateEvent(params: DeactivateEventParam): Promise<void> {
     .promise();
 }
 
-function getActiveEventQuery(chatId: number) {
+function getActiveEventQuery(chatId: number): Omit<DocumentClient.QueryInput, 'TableName'> {
   return {
     KeyConditionExpression: 'chatId = :c',
     FilterExpression: 'active = :a',

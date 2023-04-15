@@ -5,6 +5,7 @@ import { lambdaWrapper } from 'serverless-jest-plugin';
 import { ActionResults, Actions, ActionStatuses, IMessage, Languages } from '../types';
 import { dateFormats, formatDate, parseDate } from '../utils/date';
 import { eventAdd } from './event-add';
+import { DateTime } from 'luxon';
 
 describe(`${path.relative(process.cwd(), __filename)}`, () => {
   let eventAddAction: Wrapped<IMessage, ActionResults[Actions.eventAdd]>;
@@ -64,13 +65,14 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
     });
   });
 
-  // TODO  fix unstable test
-  it.skip('create event for another date', async () => {
+  it.only('create event for another date', async () => {
     const chatId = faker.datatype.number();
     const dateInMillis1 = faker.date.future().getTime();
     const date1 = formatDate(dateInMillis1);
 
-    const dateInMillis2 = faker.date.future().getTime();
+    const dateInMillis2 = DateTime.fromMillis(dateInMillis1)
+      .minus(600 * 1000)
+      .toMillis();
     const date2 = formatDate(dateInMillis2);
 
     const response1 = await eventAddAction.run({
