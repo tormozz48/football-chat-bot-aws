@@ -41,6 +41,11 @@ provider:
     TELEGRAM_BOT_WEBHOOK_URL: ${param:telegramBotWebhookUrl}
     VK_TOKEN: ${param:vkToken}
     VK_CONFIRMATION: ${param:vkConfirmation}
+    # uncomment for run tests
+    # TELEGRAM_BOT_TOKEN: telegram-bot-test-token-12345
+    # TELEGRAM_BOT_WEBHOOK_URL: http://telegram.bot.webhook.url
+    # VK_TOKEN: vk-test-token-12345
+    # VK_CONFIRMATION: confirmation-12345
   iam:
     role:
       statements:
@@ -98,6 +103,9 @@ resources:
           -
             AttributeName: eventDate
             AttributeType: N
+          -
+            AttributeName: active
+            AttributeType: N
         KeySchema:
           -
             AttributeName: chatId
@@ -105,3 +113,12 @@ resources:
           -
             AttributeName: eventDate
             KeyType: RANGE
+        LocalSecondaryIndexes:
+          - IndexName: LSIChatActiveEvent
+            KeySchema:
+              - AttributeName: chatId
+                KeyType: HASH
+              - AttributeName: active
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
