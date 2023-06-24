@@ -1,5 +1,5 @@
 import { ActionResults, Actions, ActionStatuses, IMessage } from '../types';
-import { resolveActiveEvent, wrapper } from './utils';
+import { resolveEvent, wrapper } from './utils';
 
 export const eventInfo = wrapper<Actions.eventInfo>(eventInfoFn);
 
@@ -12,9 +12,9 @@ export const eventInfo = wrapper<Actions.eventInfo>(eventInfoFn);
 async function eventInfoFn(message: IMessage): Promise<ActionResults[Actions.eventInfo]> {
   const { chatId } = message;
 
-  const activeEvent = await resolveActiveEvent(chatId);
+  const event = await resolveEvent(chatId);
   return {
     status: ActionStatuses.success,
-    body: activeEvent,
+    body: event,
   };
 }

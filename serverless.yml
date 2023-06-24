@@ -103,9 +103,6 @@ resources:
           -
             AttributeName: eventDate
             AttributeType: N
-          -
-            AttributeName: active
-            AttributeType: N
         KeySchema:
           -
             AttributeName: chatId
@@ -113,12 +110,3 @@ resources:
           -
             AttributeName: eventDate
             KeyType: RANGE
-        LocalSecondaryIndexes:
-          - IndexName: LSIChatActiveEvent
-            KeySchema:
-              - AttributeName: chatId
-                KeyType: HASH
-              - AttributeName: active
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL

@@ -6,6 +6,7 @@ import { formatDate } from '../utils/date';
 import { ActionResults, Actions, ActionStatuses, IMessage, Languages } from '../types';
 import { eventAdd } from './event-add';
 import { eventRemove } from './event-remove';
+import { getEvents } from '../database/repository';
 
 describe(`${path.relative(process.cwd(), __filename)}`, () => {
   let eventAddAction: Wrapped<IMessage, ActionResults[Actions.eventAdd]>;
@@ -30,6 +31,9 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
     const dateInMillis = faker.date.future().getTime();
     const date = formatDate(dateInMillis);
 
+    const eventsBefore = await getEvents({ chatId });
+    expect(eventsBefore).toHaveLength(0);
+
     await eventAddAction.run({
       ...createPayloadBaseParams(),
       chatId,
@@ -37,6 +41,9 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
       action: Actions[Actions.eventAdd],
       fullText: `/event_add ${date}`,
     });
+
+    const eventsAfterCreation = await getEvents({ chatId });
+    expect(eventsAfterCreation).toHaveLength(1);
 
     const response = await eventRemoveAction.run({
       ...createPayloadBaseParams(),
@@ -49,9 +56,11 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
     expect(response.status).toEqual(ActionStatuses.success);
     expect(response.body).toMatchObject({
       chatId,
-      active: 1,
       members: [],
     });
+
+    const eventsAfterRemoval = await getEvents({ chatId });
+    expect(eventsAfterRemoval).toHaveLength(0);
   });
 
   describe('errors', () => {

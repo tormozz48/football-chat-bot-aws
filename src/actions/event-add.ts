@@ -1,5 +1,5 @@
 import { LambdaLog } from 'lambda-log';
-import { createEvent, getActiveEvent, getEvent } from '../database/repository';
+import { createEvent, getChatEvent, getEvent } from '../database/repository';
 import { ActionResults, Actions, ActionStatuses, IMessage } from '../types';
 import { isDateInPast, parseDate } from '../utils/date';
 import { ActionError, wrapper } from './utils';
@@ -36,9 +36,9 @@ async function eventAddFn(message: IMessage): Promise<ActionResults[Actions.even
   }
 
   await createEvent({ chatId, eventDate });
-  const activeEvent = await getActiveEvent({ chatId });
+  const currentEvent = await getChatEvent({ chatId });
 
-  logger.info('event has been successfully created', activeEvent);
+  logger.info('event has been successfully created', currentEvent);
 
-  return { status: ActionStatuses.success, body: activeEvent };
+  return { status: ActionStatuses.success, body: currentEvent };
 }

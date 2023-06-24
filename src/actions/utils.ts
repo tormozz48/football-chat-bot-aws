@@ -1,5 +1,5 @@
 import { LambdaLog } from 'lambda-log';
-import { getActiveEvent } from '../database/repository';
+import { getChatEvent } from '../database/repository';
 import { ActionResults, IMessage, Actions, ActionStatuses } from '../types';
 import { Event } from '../database/types';
 
@@ -25,14 +25,14 @@ export class ActionError extends Error {
  * @param  {number} chatId
  * @return Promise<Event>
  */
-export async function resolveActiveEvent(chatId: number): Promise<Event> {
-  const activeEvent = await getActiveEvent({ chatId });
-  if (!activeEvent) {
-    logger.warn('active event does not exist', { chatId });
+export async function resolveEvent(chatId: number): Promise<Event> {
+  const currentEvent = await getChatEvent({ chatId });
+  if (!currentEvent) {
+    logger.warn('current event does not exist', { chatId });
     throw new ActionError(ActionStatuses.eventNotFound);
   }
 
-  return activeEvent;
+  return currentEvent;
 }
 
 /**

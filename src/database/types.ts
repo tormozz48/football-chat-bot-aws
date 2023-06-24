@@ -8,8 +8,6 @@ export type CreateEventParam = EventParam;
 
 export type UpdateEventMembersParam = EventParam & { members: Event['members'] };
 
-export type DeactivateEventParam = EventParam;
-
 export type RemoveEventParam = EventParam;
 
 interface EventMember {

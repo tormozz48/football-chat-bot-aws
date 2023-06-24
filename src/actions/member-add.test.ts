@@ -56,7 +56,6 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
     expect(response.status).toEqual(ActionStatuses.success);
     expect(response.body).toMatchObject({
       chatId,
-      active: 1,
       members: [{ name: memberName }],
     });
   });
@@ -78,7 +77,6 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
     expect(response.status).toEqual(ActionStatuses.success);
     expect(response.body).toMatchObject({
       chatId,
-      active: 1,
       members: [{ name: anotherPersonName }],
     });
   });

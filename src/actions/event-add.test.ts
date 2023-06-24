@@ -6,6 +6,7 @@ import { ActionResults, Actions, ActionStatuses, IMessage, Languages } from '../
 import { dateFormats, formatDate, parseDate } from '../utils/date';
 import { eventAdd } from './event-add';
 import { DateTime } from 'luxon';
+import { getEvents } from '../database/repository';
 
 describe(`${path.relative(process.cwd(), __filename)}`, () => {
   let eventAddAction: Wrapped<IMessage, ActionResults[Actions.eventAdd]>;
@@ -27,6 +28,9 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
     const dateInMillis = faker.date.future().getTime();
     const date = formatDate(dateInMillis);
 
+    const eventsBefore = await getEvents({ chatId });
+    expect(eventsBefore).toHaveLength(0);
+
     const response = await eventAddAction.run({
       ...createPayloadBaseParams(),
       chatId,
@@ -37,10 +41,19 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
     expect(response.status).toEqual(ActionStatuses.success);
     expect(response.body).toMatchObject({
       chatId,
-      // eventDate: new Date(dateInMillis).ge.valueOf(),
-      active: 1,
       members: [],
     });
+
+    const eventsAfter = await getEvents({ chatId });
+    expect(eventsAfter).toHaveLength(1);
+    expect(eventsAfter).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          chatId,
+          members: [],
+        }),
+      ]),
+    );
   });
 
   dateFormats.forEach((format) => {
@@ -59,13 +72,18 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
       expect(response.status).toEqual(ActionStatuses.success);
       expect(response.body).toMatchObject({
         chatId,
-        active: 1,
+        members: [],
+      });
+
+      const [createdEvent] = await getEvents({ chatId });
+      expect(createdEvent).toMatchObject({
+        chatId,
         members: [],
       });
     });
   });
 
-  it.only('create event for another date', async () => {
+  it('create event for another date', async () => {
     const chatId = faker.datatype.number();
     const dateInMillis1 = faker.date.future().getTime();
     const date1 = formatDate(dateInMillis1);
@@ -86,7 +104,6 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
     expect(response1.body).toMatchObject({
       chatId,
       eventDate: parseDate(date1).toMillis(),
-      active: 1,
       members: [],
     });
 
@@ -101,7 +118,6 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
     expect(response2.body).toMatchObject({
       chatId,
       eventDate: parseDate(date2).toMillis(),
-      active: 1,
       members: [],
     });
   });
@@ -120,6 +136,9 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
 
       expect(response.status).toEqual(ActionStatuses.eventInvalidDate);
       expect(response.body).toEqual({});
+
+      const createdEvents = await getEvents({ chatId });
+      expect(createdEvents).toHaveLength(0);
     });
 
     it(`status: ${ActionStatuses.eventInvalidDatePast}`, async () => {
@@ -135,6 +154,9 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
 
       expect(response.status).toEqual(ActionStatuses.eventInvalidDatePast);
       expect(response.body).toEqual({});
+
+      const createdEvents = await getEvents({ chatId });
+      expect(createdEvents).toHaveLength(0);
     });
 
     it(`status: ${ActionStatuses.eventAlreadyExists}`, async () => {
@@ -151,8 +173,14 @@ describe(`${path.relative(process.cwd(), __filename)}`, () => {
       const firstCallResponse = await eventAddAction.run(payload);
       expect(firstCallResponse.status).toEqual(ActionStatuses.success);
 
+      const createdEventsOnFirstCall = await getEvents({ chatId });
+      expect(createdEventsOnFirstCall).toHaveLength(1);
+
       const secondCallResponse = await eventAddAction.run(payload);
       expect(secondCallResponse.status).toEqual(ActionStatuses.eventAlreadyExists);
+
+      const createdEventsOnSecondCall = await getEvents({ chatId });
+      expect(createdEventsOnSecondCall).toHaveLength(1);
     });
   });
 });

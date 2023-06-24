@@ -1,7 +1,7 @@
 import { LambdaLog } from 'lambda-log';
 import { removeEvent } from '../database/repository';
 import { ActionResults, Actions, ActionStatuses, IMessage } from '../types';
-import { resolveActiveEvent, wrapper } from './utils';
+import { resolveEvent, wrapper } from './utils';
 
 const logger = new LambdaLog({ tags: ['eventRemove'] });
 
@@ -16,10 +16,10 @@ export const eventRemove = wrapper<Actions.eventRemove>(eventRemoveFn);
 async function eventRemoveFn(message: IMessage): Promise<ActionResults[Actions.eventRemove]> {
   const { chatId } = message;
 
-  const activeEvent = await resolveActiveEvent(chatId);
+  const currentEvent = await resolveEvent(chatId);
 
-  await removeEvent({ chatId: activeEvent.chatId, eventDate: activeEvent.eventDate });
-  logger.debug('event has been removed', activeEvent);
+  await removeEvent({ chatId: currentEvent.chatId, eventDate: currentEvent.eventDate });
+  logger.debug('event has been removed', currentEvent);
 
-  return { status: ActionStatuses.success, body: activeEvent };
+  return { status: ActionStatuses.success, body: currentEvent };
 }
