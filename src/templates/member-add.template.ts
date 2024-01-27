@@ -30,7 +30,7 @@ const success: Template<Actions.memberAdd, ActionStatuses.success> = {
   bundle: {
     en: [
       '✅ <strong>{{name}}</strong> will take part in event ✅',
-      '',
+      '🗓 <i>{{eventDate}}</i>',
       'ℹ️ List of members:',
       '{{#each members}}',
       '{{index}}: <i>{{name}}</i>',
@@ -40,7 +40,7 @@ const success: Template<Actions.memberAdd, ActionStatuses.success> = {
     ],
     ru: [
       '✅ <strong>{{name}}</strong> примет участие в событии ✅',
-      '',
+      '🗓 <i>{{eventDate}}</i>',
       'ℹ️ Список участников:',
       '{{#each members}}',
       '{{index}}: <i>{{name}}</i>',
