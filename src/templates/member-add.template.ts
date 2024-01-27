@@ -1,6 +1,7 @@
 import { ActionResult, ActionResults, Actions, ActionStatuses, Member } from '../types';
 import { Template } from './types';
 import { Event } from '../database/types';
+import { formatDate } from '../utils/date';
 
 const memberAlreadyAdded: Template<Actions.memberAdd, ActionStatuses.memberAlreadyAdded> = {
   action: Actions.memberAdd,
@@ -22,7 +23,7 @@ const success: Template<Actions.memberAdd, ActionStatuses.success> = {
 
     return {
       name: body.name,
-      eventDate: body.eventDate,
+      eventDate: formatDate(body.eventDate),
       members: body.members.map(({ name }, index) => ({ index: index + 1, name })),
       total: body.members.length,
     };
