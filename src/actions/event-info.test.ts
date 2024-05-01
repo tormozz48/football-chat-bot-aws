@@ -1,4 +1,4 @@
-import * as faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { Wrapped } from 'lambda-wrapper';
 import * as path from 'path';
 import { lambdaWrapper } from 'serverless-jest-plugin';
