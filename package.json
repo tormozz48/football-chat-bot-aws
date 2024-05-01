@@ -30,6 +30,7 @@
     "lint": "npm run eslint && npm run depcheck && npm run type-coverage",
     "db:migrate": "serverless dynamodb migrate",
     "dev": "serverless offline",
+    "config:credentials": "serverless config credentials --provider aws --overwrite",
     "deploy": "serverless deploy --use-local-credentials",
     "pretest": "npm run db:migrate",
     "test": "jest --silent",
