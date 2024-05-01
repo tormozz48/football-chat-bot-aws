@@ -29,7 +29,7 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs20.x
   versionFunctions: false
   tracing:
     lambda: true
@@ -58,7 +58,7 @@ provider:
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
           Resource:
-            - Fn::GetAtt: [ EventsTable, Arn ]
+            - Fn::GetAtt: [EventsTable, Arn]
         - Effect: Allow
           Action:
             - lambda:InvokeFunction
@@ -97,16 +97,12 @@ resources:
         TableName: ${self:custom.tableName}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
-          -
-            AttributeName: chatId
+          - AttributeName: chatId
             AttributeType: N
-          -
-            AttributeName: eventDate
+          - AttributeName: eventDate
             AttributeType: N
         KeySchema:
-          -
-            AttributeName: chatId
+          - AttributeName: chatId
             KeyType: HASH
-          -
-            AttributeName: eventDate
+          - AttributeName: eventDate
             KeyType: RANGE
